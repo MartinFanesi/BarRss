@@ -4,6 +4,27 @@ Extensión para **Google Chrome** con arquitectura centrada en la lectura: **El 
 
 ---
 
+## 📸 Capturas de Pantalla & Experiencia Visual
+
+> *Todas las capturas están calibradas en resolución estándar de **1280 × 800 px**, listas para visualización en GitHub y para carga directa en el **Chrome Web Store Developer Dashboard**.*
+
+### 📰 1. El Diario Digital: Portada Principal & Modo Noche
+| 📰 Modo Papel Prensa (Portada Broadsheet) | 🌙 Modo Noche Editorial (Lectura Nocturna) |
+| :---: | :---: |
+| ![Portada BarRSS Papel Prensa](screenshots/01_portada_papel_prensa.png) | ![Modo Noche Editorial](screenshots/02_modo_noche_editorial.png) |
+
+### ⚙️ 2. Configuración Avanzada & Selector de Temas
+| ⚙️ Catálogo de 20 Países (Sin Scroll Horizontal) | 🎨 Menú Desplegable de 7 Estilos Editoriales |
+| :---: | :---: |
+| ![Configuración y Canales](screenshots/04_configuracion_catalogo_paises.png) | ![Selector de Estilos](screenshots/05_menu_estilos_y_temas.png) |
+
+### 👑 3. Midnight Elegance & Panel Lateral Nativo
+| 👑 Modo Midnight Elegance (Alta Costura) | 🖥️ Panel Lateral Nativo de Chrome (Side Panel) |
+| :---: | :---: |
+| ![Modo Midnight Elegance](screenshots/03_modo_midnight_elegance.png) | ![Panel Lateral Nativo de Chrome](screenshots/06_panel_lateral_sidepanel.png) |
+
+---
+
 ## 🌟 Tres Experiencias de Lectura
 
 ### Modo 1: 📰 El Diario Digital (Lector Principal)
