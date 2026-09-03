@@ -3240,3 +3240,44 @@ html:not([data-theme="dark"]):not([data-theme="cyberpunk"]):not([data-theme="mid
     display: none !important;
   }
 }
+
+/* ==========================================================================
+   PLACEHOLDER ESTILIZADO DE NOTICIAS SIN IMAGEN (VECTORIAL SEGURO)
+   ========================================================================== */
+.hero-placeholder-banner {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--bg-subtle, rgba(0,0,0,0.05)) 0%, var(--border-color, rgba(0,0,0,0.1)) 100%);
+  min-height: 240px;
+}
+
+.hero-placeholder-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-muted);
+  opacity: 0.65;
+}
+
+.hero-placeholder-svg {
+  width: 64px;
+  height: 64px;
+  fill: currentColor;
+}
+
+.hero-placeholder-label {
+  font-family: var(--font-title, Georgia, serif);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.card-placeholder-svg {
+  width: 38px;
+  height: 38px;
+  fill: var(--text-muted);
+  opacity: 0.5;
+}

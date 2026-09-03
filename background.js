@@ -526,6 +526,21 @@ function parseFeedXml(xml) {
         }
       }
     }
+    // Búsqueda en enlaces directos a imágenes de Reddit / Imgur / Tenor
+    if (!imageUrl) {
+      const decodedBlock = decodeHtmlEntities(block);
+      const linkImg = decodedBlock.match(/<a[^>]+href=["'](https?:\/\/[^"'>]+\.(?:jpg|jpeg|png|gif|webp)(?:\?[^"'>]*)?)["']/i);
+      if (linkImg) {
+        imageUrl = linkImg[1];
+      }
+    }
+    if (!imageUrl) {
+      const decodedBlock = decodeHtmlEntities(block);
+      const redditPreview = decodedBlock.match(/<a[^>]+href=["'](https?:\/\/(?:preview\.redd\.it|i\.redd\.it|external-preview\.redd\.it)[^"'>]+)["']/i);
+      if (redditPreview) {
+        imageUrl = redditPreview[1];
+      }
+    }
 
     if (imageUrl) {
       imageUrl = decodeHtmlEntities(imageUrl).trim();
@@ -576,12 +591,22 @@ function cleanXmlText(text) {
   if (!text) return '';
   let str = text;
   str = str.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/gi, '$1');
-  // Limpieza de firmas y enlaces residuales de Reddit
-  str = str.replace(/submitted by\s+<a[^>]*>.*?<\/a>/gi, '');
-  str = str.replace(/\[<a[^>]*>link<\/a>\]\s*\[<a[^>]*>comments<\/a>\]/gi, '');
-  str = str.replace(/<\/?[^>]+(>|$)/g, ' ');
+  // 1. Decodificar entidades HTML iniciales (&lt; -> <, etc.)
   str = decodeHtmlEntities(str);
-  str = str.replace(/\b(submitted by|\[link\]|\[comments\])\b/gi, '');
+  // 2. Eliminar comentarios HTML (ej: <!-- SC_OFF -->)
+  str = str.replace(/<!--[\s\S]*?-->/g, ' ');
+  // 3. Eliminar firmas de reddit y enlaces residuales
+  str = str.replace(/submitted by\s+<a[^>]*>.*?<\/a>/gi, ' ');
+  str = str.replace(/\[<a[^>]*>(?:link|comments)<\/a>\]/gi, ' ');
+  str = str.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, ' ');
+  str = str.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, ' ');
+  // 4. Eliminar todas las etiquetas HTML residuales
+  str = str.replace(/<\/?[a-z0-9_\-]+[^>]*>/gi, ' ');
+  // 5. Segunda pasada de entidades HTML
+  str = decodeHtmlEntities(str);
+  // 6. Eliminar etiquetas o fragmentos rotos como <...
+  str = str.replace(/<[^>]*>?/g, ' ');
+  str = str.replace(/\b(submitted by|\[link\]|\[comments\])\b/gi, ' ');
   return str.replace(/\s+/g, ' ').trim();
 }
 

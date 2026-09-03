@@ -873,8 +873,11 @@ function renderHeroStory(story) {
     ? `<div class="hero-image-wrapper">
          <img src="${escapeHtml(story.imageUrl)}" alt="${escapeHtml(story.title)}" referrerpolicy="no-referrer" loading="lazy" onerror="this.parentElement.style.display='none'">
        </div>`
-    : `<div class="hero-image-wrapper" style="display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--bg-subtle) 0%, var(--border-color) 100%);">
-         <span style="font-size: 64px;">📰</span>
+    : `<div class="hero-image-wrapper hero-placeholder-banner">
+         <div class="hero-placeholder-inner">
+           <svg viewBox="0 0 24 24" class="hero-placeholder-svg"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+           <span class="hero-placeholder-label">${escapeHtml(story.feedName || 'BarRSS')}</span>
+         </div>
        </div>`;
 
   elements.heroSection.innerHTML = `
@@ -938,10 +941,10 @@ function renderGridStories(stories) {
 
     const imageHtml = story.imageUrl
       ? `<div class="story-card-image">
-           <img src="${escapeHtml(story.imageUrl)}" alt="${escapeHtml(story.title)}" referrerpolicy="no-referrer" loading="lazy" onerror="this.parentElement.className='story-card-image placeholder'; this.parentElement.innerHTML='<span class=\\'placeholder-icon\\'>🗞️</span>'">
+           <img src="${escapeHtml(story.imageUrl)}" alt="${escapeHtml(story.title)}" referrerpolicy="no-referrer" loading="lazy" onerror="this.parentElement.className='story-card-image placeholder'; this.parentElement.innerHTML='<svg viewBox=\\'0 0 24 24\\' class=\\'card-placeholder-svg\\'><path d=\\'M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z\\'/></svg>'">
          </div>`
       : `<div class="story-card-image placeholder">
-           <span class="placeholder-icon">${getCategoryEmoji(story.category)}</span>
+           <svg viewBox="0 0 24 24" class="card-placeholder-svg"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
          </div>`;
 
     card.innerHTML = `
