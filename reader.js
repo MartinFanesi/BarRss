@@ -253,6 +253,15 @@ function applyTheme(theme) {
 
   if (elements.themeIcon) elements.themeIcon.textContent = themeData.icon;
   if (elements.themeLabel) elements.themeLabel.textContent = themeData.label;
+
+  const themeItems = document.querySelectorAll('.theme-menu-item');
+  themeItems.forEach(item => {
+    if (item.getAttribute('data-theme') === theme) {
+      item.classList.add('active');
+    } else {
+      item.classList.remove('active');
+    }
+  });
 }
 
 /* ==========================================================================
