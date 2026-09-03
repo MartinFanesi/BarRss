@@ -91,49 +91,49 @@
           </button>
           <div class="theme-dropdown-menu" id="themeDropdownMenu" style="display: none;">
             <button type="button" class="theme-menu-item" data-theme="light">
-              <span class="theme-bullet" style="background: #fbfaf7; border: 1px solid #d4d0c5;"></span>
+              <span class="theme-bullet" style="background: #ffffff; border: 2px solid #0f172a;"></span>
               <div class="theme-menu-text">
                 <span class="theme-name">📰 Papel Prensa</span>
                 <span class="theme-sub">Broadsheet Clásico &bull; Playfair</span>
               </div>
             </button>
             <button type="button" class="theme-menu-item" data-theme="dark">
-              <span class="theme-bullet" style="background: #0f172a;"></span>
+              <span class="theme-bullet" style="background: #0f172a; border: 2px solid #38bdf8;"></span>
               <div class="theme-menu-text">
                 <span class="theme-name">🌙 Noche Editorial</span>
                 <span class="theme-sub">Revista Nocturna &bull; Merriweather</span>
               </div>
             </button>
             <button type="button" class="theme-menu-item" data-theme="sepia">
-              <span class="theme-bullet" style="background: #fbf0d9; border: 1px solid #cbb898;"></span>
+              <span class="theme-bullet" style="background: #fbf0d9; border: 2px solid #b45309;"></span>
               <div class="theme-menu-text">
                 <span class="theme-name">📜 Sepia Vintage</span>
                 <span class="theme-sub">Gaceta Columnar 1890 &bull; EB Garamond</span>
               </div>
             </button>
             <button type="button" class="theme-menu-item" data-theme="financial">
-              <span class="theme-bullet" style="background: #fff1e5; border: 1px solid #d9b8a3;"></span>
+              <span class="theme-bullet" style="background: #fed7aa; border: 2px solid #0d7680;"></span>
               <div class="theme-menu-text">
                 <span class="theme-name">📈 Financial Salmón</span>
                 <span class="theme-sub">Prensa Financiera &bull; Newsreader</span>
               </div>
             </button>
             <button type="button" class="theme-menu-item" data-theme="nordic">
-              <span class="theme-bullet" style="background: #f8fafc; border: 1px solid #94a3b8;"></span>
+              <span class="theme-bullet" style="background: #f8fafc; border: 2px solid #0284c7;"></span>
               <div class="theme-menu-text">
                 <span class="theme-name">❄️ Nórdico Minimal</span>
                 <span class="theme-sub">Revista Asimétrica &bull; Space Grotesk</span>
               </div>
             </button>
             <button type="button" class="theme-menu-item" data-theme="cyberpunk">
-              <span class="theme-bullet" style="background: #050505; border: 1px solid #00ff66;"></span>
+              <span class="theme-bullet" style="background: #050505; border: 2px solid #10b981;"></span>
               <div class="theme-menu-text">
                 <span class="theme-name">⚡ Terminal Cyberpunk</span>
                 <span class="theme-sub">HUD Táctico Matrix &bull; JetBrains</span>
               </div>
             </button>
             <button type="button" class="theme-menu-item" data-theme="midnight">
-              <span class="theme-bullet" style="background: #090e1a; border: 1px solid #fbbf24;"></span>
+              <span class="theme-bullet" style="background: #090e1a; border: 2px solid #d4af37;"></span>
               <div class="theme-menu-text">
                 <span class="theme-name">✨ Midnight Elegance</span>
                 <span class="theme-sub">Magazine de Lujo &bull; Cormorant</span>
@@ -150,27 +150,60 @@
     <!-- Cabecera de Portada (Masthead) -->
     <header class="newspaper-masthead">
       <div class="masthead-meta-bar">
-        <span class="meta-item">EDICIÓN LATINOAMÉRICA &bull; INTERNACIONAL</span>
-        <span class="meta-item font-serif">PRENSA INDEPENDIENTE EN VIVO</span>
-        <span class="meta-item" id="mastheadFeedsCount">CARGANDO...</span>
+        <div class="meta-item meta-edition">
+          <span class="meta-badge-dot"></span>
+          <span>EDICIÓN LATINOAMÉRICA &bull; INTERNACIONAL</span>
+        </div>
+        <div class="meta-item meta-tagline">
+          <span class="meta-divider-ornament">❖</span>
+          <span>PRENSA INDEPENDIENTE EN VIVO</span>
+          <span class="meta-divider-ornament">❖</span>
+        </div>
+        <div class="meta-item meta-feeds" id="mastheadFeedsContainer">
+          <span class="meta-pulse-live"></span>
+          <span id="mastheadFeedsCount">4 CANALES ACTIVOS</span>
+        </div>
       </div>
+
       <h1 class="newspaper-title">EL DIARIO</h1>
       <p class="newspaper-tagline">Noticias seleccionadas de tus canales RSS preferidos en tiempo real</p>
+
+      <div class="masthead-divider">
+        <div class="divider-line thick"></div>
+        <div class="divider-line thin"></div>
+      </div>
     </header>
 
     <!-- Barra de Filtros por Categoría & Favoritos -->
-    <nav class="categories-nav">
+    <nav class="categories-nav" aria-label="Secciones del periódico">
       <div class="categories-container" id="categoriesContainer">
-        <button type="button" class="cat-pill active" data-cat="all">Todas las Noticias</button>
-        <button type="button" class="cat-pill" data-cat="General">📰 Generales</button>
-        <button type="button" class="cat-pill" data-cat="Política">🏛️ Política</button>
-        <button type="button" class="cat-pill" data-cat="Economía">📈 Economía</button>
-        <button type="button" class="cat-pill" data-cat="Tecnología">💻 Tecnología</button>
-        <button type="button" class="cat-pill" data-cat="Deportes">⚽ Deportes</button>
-        <button type="button" class="cat-pill" data-cat="Cultura">🎬 Cultura</button>
-        <button type="button" class="cat-pill" data-cat="🔴 Reddit & Comunidades">🔴 Reddit</button>
+        <button type="button" class="cat-pill active" data-cat="all">
+          <span>🗞️ Todas</span>
+        </button>
+        <button type="button" class="cat-pill" data-cat="General">
+          <span>📰 Generales</span>
+        </button>
+        <button type="button" class="cat-pill" data-cat="Política">
+          <span>🏛️ Política</span>
+        </button>
+        <button type="button" class="cat-pill" data-cat="Economía">
+          <span>📈 Economía</span>
+        </button>
+        <button type="button" class="cat-pill" data-cat="Tecnología">
+          <span>💻 Tecnología</span>
+        </button>
+        <button type="button" class="cat-pill" data-cat="Deportes">
+          <span>⚽ Deportes</span>
+        </button>
+        <button type="button" class="cat-pill" data-cat="Cultura">
+          <span>🎬 Cultura</span>
+        </button>
+        <button type="button" class="cat-pill" data-cat="🔴 Reddit & Comunidades">
+          <span>💬 Reddit</span>
+        </button>
         <button type="button" class="cat-pill cat-pill-saved" data-cat="saved" id="catPillSaved">
-          ⭐ Favoritos <span class="saved-count-badge" id="savedCountBadge">0</span>
+          <span>⭐ Favoritos</span>
+          <span class="saved-count-badge" id="savedCountBadge">0</span>
         </button>
       </div>
     </nav>
