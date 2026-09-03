@@ -145,12 +145,35 @@ async function openReaderApp(preferredMode = null) {
       }
     }
 
-    // Si no, crear ventana de aplicación independiente
+    // Dimensiones óptimas adaptadas al monitor del usuario
+    let targetW = 1200;
+    let targetH = 720;
+    let targetLeft = undefined;
+    let targetTop = undefined;
+
+    try {
+      const currentWin = await chrome.windows.getLastFocused();
+      if (currentWin && currentWin.width && currentWin.height) {
+        // 88% del ancho y 84% de la altura para no invadir nunca la barra de tareas
+        targetW = Math.min(1240, Math.round(currentWin.width * 0.90));
+        targetH = Math.min(740, Math.round(currentWin.height * 0.84));
+        if (currentWin.left !== undefined && currentWin.top !== undefined) {
+          targetLeft = Math.round(currentWin.left + (currentWin.width - targetW) / 2);
+          targetTop = Math.round(currentWin.top + (currentWin.height - targetH) / 2);
+        }
+      }
+    } catch (e) {
+      console.warn('[BarRSS] Error determinando ventana activa:', e);
+    }
+
+    // Crear ventana de aplicación independiente centrada y accesible
     await chrome.windows.create({
       url: readerUrl,
       type: 'popup',
-      width: 1280,
-      height: 850
+      width: targetW,
+      height: targetH,
+      left: targetLeft,
+      top: targetTop
     });
   } else {
     // Modo pestaña: si ya existe una pestaña abierta, enfocarla

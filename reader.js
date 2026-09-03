@@ -204,6 +204,7 @@ const THEMES = {
 
 /// Inicialización
 document.addEventListener('DOMContentLoaded', async () => {
+  ensureOptimalWindowPlacement();
   initTheme();
   renderCurrentDate();
   setupEventListeners();
@@ -212,6 +213,46 @@ document.addEventListener('DOMContentLoaded', async () => {
   await checkOnboarding();
   await loadNewspaperStories();
 });
+
+function ensureOptimalWindowPlacement() {
+  try {
+    const availW = window.screen.availWidth;
+    const availH = window.screen.availHeight;
+    const availLeft = window.screen.availLeft || 0;
+    const availTop = window.screen.availTop || 0;
+
+    if (!availW || !availH) return;
+
+    if (chrome.windows && chrome.windows.getCurrent) {
+      chrome.windows.getCurrent(win => {
+        if (win && win.type === 'popup') {
+          const maxH = Math.max(520, Math.min(800, Math.round(availH * 0.88)));
+          const maxW = Math.max(800, Math.min(1240, Math.round(availW * 0.90)));
+
+          const isOutOfBounds = (win.top + win.height) > (availTop + availH);
+          const isTooTall = win.height > maxH;
+          const isTooWide = win.width > maxW;
+
+          if (isTooTall || isTooWide || isOutOfBounds) {
+            const finalW = Math.min(win.width, maxW);
+            const finalH = Math.min(win.height, maxH);
+            const finalLeft = Math.round(availLeft + (availW - finalW) / 2);
+            const finalTop = Math.round(availTop + (availH - finalH) / 2);
+
+            chrome.windows.update(win.id, {
+              left: Math.max(availLeft, finalLeft),
+              top: Math.max(availTop, finalTop),
+              width: finalW,
+              height: finalH
+            });
+          }
+        }
+      });
+    }
+  } catch (err) {
+    console.warn('[BarRSS] Error adaptando ventana al escritorio:', err);
+  }
+}
 
 /* ==========================================================================
    1. GESTIÓN DE 7 ESTILOS EDITORIALES
