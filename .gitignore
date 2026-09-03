@@ -1,0 +1,19 @@
+# Binarios e instaladores pesados
+*.deb
+*.rpm
+*.zip
+*.tar.*
+
+# Documentos personales y planillas
+*.xlsx
+*.xls
+*.pdf
+*.docx
+*.csv
+
+# Sistema y logs
+.DS_Store
+Thumbs.db
+*.log
+node_modules/
+.env

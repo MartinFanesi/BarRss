@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configuración de BarRSS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #0b1329;
+      --bg-card: #162038;
+      --bg-input: #1e2c4d;
+      --border-color: #27385f;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #f97316;
+      --primary-hover: #ea580c;
+      --accent: #38bdf8;
+      --success: #22c55e;
+      --danger: #ef4444;
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      width: 380px;
+      max-height: 590px;
+      overflow-y: auto;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, 'Noto Color Emoji', 'Apple Color Emoji', 'Segoe UI Emoji', sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-size: 13px;
+      line-height: 1.4;
+      padding: 14px;
+      padding-bottom: 28px;
+    }
+
+    body::-webkit-scrollbar {
+      width: 6px;
+    }
+    body::-webkit-scrollbar-track {
+      background: var(--bg-main);
+    }
+    body::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 4px;
+    }
+
+    /* Encabezado */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-icon {
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, var(--primary) 0%, #c2410c 100%);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(249, 115, 22, 0.4);
+    }
+
+    .brand-icon svg {
+      width: 16px;
+      height: 16px;
+      fill: #ffffff;
+    }
+
+    .brand h1 {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .brand span {
+      color: var(--primary);
+    }
+
+    .autosave-badge {
+      font-size: 10px;
+      font-weight: 600;
+      color: #4ade80;
+      background: rgba(34, 197, 94, 0.12);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      padding: 1px 7px;
+      border-radius: 12px;
+      margin-left: 6px;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      letter-spacing: 0.1px;
+    }
+
+    .autosave-badge.saving {
+      color: #fb923c;
+      background: rgba(249, 115, 22, 0.15);
+      border-color: rgba(249, 115, 22, 0.4);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-help {
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      border: 1px solid #38bdf8;
+      color: #ffffff;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.35);
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .btn-help:hover {
+      background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(56, 189, 248, 0.45);
+    }
+
+    /* Switch general */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 38px;
+      height: 22px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #475569;
+      transition: .3s;
+      border-radius: 22px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--primary);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(16px);
+    }
+
+    /* Navegación por pestañas */
+    .nav-tabs {
+      display: flex;
+      gap: 6px;
+      background: #0f172a;
+      padding: 5px;
+      border-radius: var(--radius);
+      margin-bottom: 14px;
+      border: 1px solid #334155;
+    }
+
+    .nav-tab {
+      flex: 1;
+      padding: 7px 4px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      color: #cbd5e1;
+      background: #1e293b;
+      border: 1px solid #334155;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+    }
+
+    .nav-tab:hover {
+      background: #334155;
+      color: #ffffff;
+      border-color: #475569;
+    }
+
+    .nav-tab.active {
+      background: linear-gradient(135deg, var(--primary) 0%, #ea580c 100%);
+      color: #ffffff;
+      border-color: #fb923c;
+      box-shadow: 0 2px 8px rgba(249, 115, 22, 0.4);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Tarjetas y secciones */
+    .section {
+      background-color: var(--bg-card);
+      border-radius: var(--radius);
+      padding: 12px;
+      margin-bottom: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Filtros de Idioma y Categoría */
+    .filter-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .filter-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .filter-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: var(--text-muted);
+    }
+
+    .styled-select {
+      width: 100%;
+      padding: 6px 8px;
+      background-color: var(--bg-input);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      color: var(--text-main);
+      font-size: 11px;
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+
+    .styled-select:focus {
+      border-color: var(--primary);
+    }
+
+    .quick-batch-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-text {
+      background: #1e293b;
+      border: 1px solid #38bdf8;
+      color: #38bdf8;
+      font-size: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 3px 8px;
+      border-radius: 4px;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+
+    .btn-text:hover {
+      background: rgba(56, 189, 248, 0.25);
+      color: #ffffff;
+      border-color: #38bdf8;
+      text-decoration: none;
+    }
+
+    .sep {
+      color: var(--border-color);
+      font-size: 11px;
+    }
+
+    /* Lista de feeds agrupados por categorías */
+    .feeds-grouped-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 240px;
+      overflow-y: auto;
+      padding-right: 4px;
+      padding-bottom: 18px;
+    }
+
+    .category-card {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+      flex-shrink: 0;
+    }
+
+    .category-card:last-child {
+      margin-bottom: 12px;
+    }
+
+    .category-card:hover {
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+
+    .category-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 9px;
+      background: rgba(30, 41, 59, 0.7);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .category-card-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #f1f5f9;
+    }
+
+    .category-card-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .category-badge {
+      font-size: 9px;
+      padding: 1px 6px;
+      border-radius: 10px;
+      background: rgba(249, 115, 22, 0.15);
+      color: #fb923c;
+      font-weight: 700;
+    }
+
+    .category-btn-toggle {
+      background: #1e293b;
+      border: 1px solid #475569;
+      color: #cbd5e1;
+      font-size: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 2px 7px;
+      border-radius: 4px;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+
+    .category-btn-toggle:hover {
+      background: #334155;
+      color: #ffffff;
+      border-color: var(--accent);
+    }
+
+    .category-card-body {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      padding: 6px 8px 10px 8px;
+    }
+
+    .feed-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-input);
+      padding: 5px 8px;
+      border-radius: 5px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.2s;
+    }
+
+    .feed-favicon {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+
+    .feed-item:hover {
+      border-color: rgba(249, 115, 22, 0.5);
+    }
+
+    .feed-item-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .feed-item-left input[type="checkbox"] {
+      accent-color: var(--primary);
+      width: 15px;
+      height: 15px;
+      cursor: pointer;
+    }
+
+    .feed-meta {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .feed-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .feed-cat {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .feed-btn-del {
+      background: transparent;
+      border: none;
+      color: #f87171;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+
+    .feed-btn-del:hover {
+      opacity: 1;
+      background: rgba(239, 68, 68, 0.15);
+    }
+
+    .feed-right-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+
+    .feed-cat-select {
+      width: auto !important;
+      padding: 3px 6px !important;
+      font-size: 10px !important;
+      background: var(--bg-card) !important;
+      border: 1px solid var(--border-color) !important;
+      border-radius: 5px !important;
+      color: var(--text-muted) !important;
+      cursor: pointer;
+      max-width: 130px;
+      transition: all 0.2s ease;
+    }
+
+    .feed-cat-select:hover {
+      border-color: var(--primary);
+      color: var(--text-main);
+    }
+
+    .add-feed-form {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    input[type="text"], input[type="url"], select {
+      width: 100%;
+      padding: 7px 10px;
+      background-color: var(--bg-input);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      color: var(--text-main);
+      font-size: 12px;
+      outline: none;
+    }
+
+    input[type="text"]:focus, input[type="url"]:focus, select:focus {
+      border-color: var(--primary);
+    }
+
+    .btn-secondary {
+      padding: 8px 12px;
+      background: #1e293b;
+      border: 1px solid #475569;
+      color: #f8fafc;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .btn-secondary:hover {
+      background: #334155;
+      border-color: var(--primary);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    /* Checkbox estilo contenedor */
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      background: var(--bg-input);
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      user-select: none;
+    }
+
+    .checkbox-container input {
+      accent-color: var(--primary);
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+
+    .checkbox-label {
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    /* Grid de colores */
+    .color-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .color-picker-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-input);
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+    }
+
+    .color-picker-item span {
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    input[type="color"] {
+      -webkit-appearance: none;
+      border: none;
+      width: 24px;
+      height: 22px;
+      border-radius: 4px;
+      cursor: pointer;
+      background: transparent;
+    }
+
+    input[type="color"]::-webkit-color-swatch-wrapper {
+      padding: 0;
+    }
+
+    input[type="color"]::-webkit-color-swatch {
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 4px;
+    }
+
+    .lang-select {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      color: #f8fafc;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 6px;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .lang-select:hover {
+      border-color: var(--primary);
+    }
+
+    /* Segmented Control (Posición y Modo) */
+    .segmented-control {
+      display: flex;
+      background-color: var(--bg-input);
+      padding: 3px;
+      border-radius: 7px;
+      border: 1px solid var(--border-color);
+      margin-top: 4px;
+      gap: 4px;
+    }
+
+    .segmented-control label {
+      flex: 1;
+      text-align: center;
+      padding: 6px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      border-radius: 5px;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+    }
+
+    .segmented-control label:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .segmented-control input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+      pointer-events: none;
+    }
+
+    .segmented-control input[type="radio"]:checked + label {
+      background: linear-gradient(135deg, var(--primary) 0%, #ea580c 100%);
+      color: #ffffff;
+      border-color: rgba(249, 115, 22, 0.6);
+      box-shadow: 0 2px 6px rgba(249, 115, 22, 0.35);
+    }
+
+    .range-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    input[type="range"] {
+      flex: 1;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .range-val {
+      font-size: 11px;
+      color: var(--text-muted);
+      min-width: 32px;
+      text-align: right;
+    }
+
+    /* Botón Guardar */
+    .btn-save {
+      width: 100%;
+      padding: 10px;
+      background: linear-gradient(135deg, var(--primary) 0%, #ea580c 100%);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 3px 10px rgba(249, 115, 22, 0.35);
+      transition: all 0.2s;
+      margin-top: 8px;
+    }
+
+    .btn-save:hover {
+      background: linear-gradient(135deg, #fb923c 0%, #ea580c 100%);
+    }
+
+    .save-alert {
+      margin-top: 8px;
+      padding: 8px 10px;
+      background-color: rgba(34, 197, 94, 0.15);
+      border: 1px solid var(--success);
+      color: #4ade80;
+      border-radius: 6px;
+      font-size: 11px;
+      text-align: center;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    /* Tarjetas del Tutorial */
+    .tutorial-card {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      padding: 12px;
+      margin-bottom: 10px;
+      border: 1px solid var(--border-color);
+    }
+
+    .tutorial-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--accent);
+    }
+
+    .tutorial-text {
+      font-size: 12px;
+      color: #cbd5e1;
+      line-height: 1.45;
+    }
+
+    .btn-start {
+      width: 100%;
+      padding: 11px;
+      background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+      color: #ffffff;
+      font-weight: 700;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      margin-top: 10px;
+      font-size: 13px;
+      box-shadow: 0 3px 10px rgba(2, 132, 199, 0.4);
+    }
+
+    .btn-start:hover {
+      background: linear-gradient(135deg, #7dd3fc 0%, #0284c7 100%);
+    }
+
+    .btn-sidepanel-banner {
+      width: 100%;
+      padding: 8px 10px;
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      border-radius: var(--radius);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      transition: all 0.2s;
+    }
+
+    .btn-sidepanel-banner:hover {
+      background: rgba(56, 189, 248, 0.15);
+      transform: translateY(-1px);
+    }
+
+    .disabled-overlay {
+      opacity: 0.4;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+
+    /* Hero Card para El Diario */
+    .reader-hero-card {
+      background: linear-gradient(135deg, rgba(249, 115, 22, 0.16) 0%, rgba(22, 32, 56, 0.95) 100%);
+      border: 1.5px solid rgba(249, 115, 22, 0.45);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+    }
+
+    .reader-hero-main {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .reader-badge {
+      display: inline-block;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: #fb923c;
+      background: rgba(249, 115, 22, 0.15);
+      border: 1px solid rgba(249, 115, 22, 0.3);
+      padding: 1px 6px;
+      border-radius: 4px;
+      margin-bottom: 4px;
+    }
+
+    .reader-hero-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.3px;
+    }
+
+    .reader-hero-desc {
+      font-size: 11px;
+      color: #cbd5e1;
+      margin-top: 2px;
+    }
+
+    .btn-open-reader-primary {
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 9px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 3px 10px rgba(249, 115, 22, 0.4);
+      transition: all 0.2s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .btn-open-reader-primary:hover {
+      background: linear-gradient(135deg, #fb923c 0%, #ea580c 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(249, 115, 22, 0.5);
+    }
+
+    .reader-hero-options {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .open-mode-selector {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .open-mode-pills {
+      display: flex;
+      background: rgba(11, 19, 41, 0.85);
+      border-radius: 6px;
+      padding: 3px;
+      border: 1px solid var(--border-color);
+      gap: 4px;
+    }
+
+    .mode-pill-label {
+      position: relative;
+      cursor: pointer;
+      display: flex;
+    }
+
+    .mode-pill-label input {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+      pointer-events: none;
+    }
+
+    .mode-pill-label span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 9px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 5px;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+
+    .mode-pill-label span:hover {
+      background: rgba(255, 255, 255, 0.09);
+      color: var(--text-main);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .mode-pill-label input:checked + span {
+      background: linear-gradient(135deg, var(--primary) 0%, #ea580c 100%);
+      color: #ffffff;
+      font-weight: 700;
+      border-color: rgba(249, 115, 22, 0.6);
+      box-shadow: 0 2px 6px rgba(249, 115, 22, 0.35);
+    }
+
+    .btn-sidepanel-mini {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-color);
+      color: var(--accent);
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+
+    .btn-sidepanel-mini:hover {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--accent);
+    }
+
+    /* Master Power Card */
+    .master-power-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+      background: rgba(148, 163, 184, 0.08);
+      border: 1.5px solid rgba(148, 163, 184, 0.25);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .master-power-card.active-card {
+      background: rgba(34, 197, 94, 0.1);
+      border-color: rgba(34, 197, 94, 0.45);
+    }
+
+    .power-card-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .power-indicator {
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .power-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+
+    .power-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .switch-large {
+      width: 46px;
+      height: 24px;
+    }
+
+    .switch-large .slider:before {
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+    }
+
+    .switch-large input:checked + .slider:before {
+      transform: translateX(22px);
+    }
+  </style>
+</head>
+<body>
+  <!-- Encabezado -->
+  <div class="header">
+    <div class="brand">
+      <div class="brand-icon" style="background: none; padding: 0;">
+        <img src="icons/icon48.png" style="width: 26px; height: 26px; border-radius: 6px;" alt="BarRSS">
+      </div>
+      <h1>Bar<span>RSS</span></h1>
+      <span id="autoSaveIndicator" class="autosave-badge" title="Tus cambios se guardan y aplican automáticamente">✓ Guardado</span>
+    </div>
+    <div class="header-actions">
+      <select id="languageSelect" class="lang-select" title="Cambiar idioma / Switch language">
+        <option value="es" selected>🇪🇸 ES</option>
+        <option value="en">🇺🇸 EN</option>
+      </select>
+      <button class="btn-help" id="btnOpenTutorial" title="Ver tutorial de uso">
+        <span id="btnTutorialLabel">❓ Guía</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- HERO CARD: EL DIARIO DIGITAL (CENTRO PRINCIPAL DE NOTICIAS) -->
+  <div class="reader-hero-card">
+    <div class="reader-hero-main">
+      <div class="reader-hero-info">
+        <div class="reader-badge">📰 Lector Principal</div>
+        <div class="reader-hero-title">El Diario BarRSS</div>
+        <div class="reader-hero-desc">Tu periódico digital interactivo en tiempo real</div>
+      </div>
+      <button class="btn-open-reader-primary" id="btnOpenReader" title="Abrir El Diario Digital">
+        <span>Abrir Diario</span>
+        <svg viewBox="0 0 24 24" style="width: 15px; height: 15px; fill: currentColor;"><path d="M5 13h11.86l-5.43 5.43 1.42 1.42L21.14 12l-8.29-7.85-1.42 1.42L16.86 11H5v2z"/></svg>
+      </button>
+    </div>
+    
+    <div class="reader-hero-options" style="justify-content: flex-end; padding-top: 6px;">
+      <button class="btn-sidepanel-mini" id="btnOpenSidePanel" title="Abrir BarRSS en el panel lateral nativo de Chrome">
+        <svg viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: currentColor;"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 16H5V5h7v14zm7 0h-5V5h5v14z"/></svg>
+        <span>Abrir en Panel Lateral</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Navegación de pestañas -->
+  <div class="nav-tabs">
+    <button class="nav-tab active" data-tab="tab-feeds">📡 Canales</button>
+    <button class="nav-tab" data-tab="tab-bar">🌊 Barra Flotante</button>
+    <button class="nav-tab" data-tab="tab-backup">☁️ Nube</button>
+    <button class="nav-tab" data-tab="tab-tutorial">💡 Guía</button>
+  </div>
+
+  <!-- PESTAÑA 1: CANALES Y FUENTES RSS -->
+  <div id="tab-feeds" class="tab-content active">
+    <!-- Selectores de Idioma y Categoría -->
+    <div class="section" style="padding: 10px 12px; margin-bottom: 10px;">
+      <div class="filter-row">
+        <div class="filter-col">
+          <label class="filter-label" for="feedLanguageSelect">🌐 Idioma</label>
+          <select id="feedLanguageSelect" class="styled-select">
+            <option value="es" selected>🇪🇸 Español</option>
+            <option value="en" disabled>🇺🇸 English (Próx.)</option>
+            <option value="pt" disabled>🇧🇷 Português (Próx.)</option>
+          </select>
+        </div>
+        <div class="filter-col">
+          <label class="filter-label" for="categoryFilterSelect">📂 Categoría</label>
+          <select id="categoryFilterSelect" class="styled-select">
+            <option value="all" selected>Todas las categorías</option>
+            <option value="Noticias Generales">📰 Noticias Generales</option>
+            <option value="Economía y Finanzas">📈 Economía y Finanzas</option>
+            <option value="Tecnología">💻 Tecnología</option>
+            <option value="🔴 Reddit & Comunidades">🔴 Reddit & Comunidades</option>
+            <option value="Deportes">⚽ Deportes</option>
+            <option value="Internacionales">🌍 Internacionales</option>
+            <option value="Cultura y Espectáculos">🎬 Cultura y Espectáculos</option>
+            <option value="Personalizados">⭐ Canales Propios</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lista de Canales Agrupados por Categorías -->
+    <div class="section">
+      <div class="section-title">
+        <span>Canales (<span id="activeFeedsCount">0</span> activos)</span>
+        <div class="quick-batch-actions">
+          <button type="button" class="btn-text" id="btnSelectAllFeeds" title="Marcar todos los canales visibles">Todos</button>
+          <span class="sep">|</span>
+          <button type="button" class="btn-text" id="btnDeselectAllFeeds" title="Desmarcar todos los canales visibles">Ninguno</button>
+        </div>
+      </div>
+      <div class="feeds-grouped-container" id="feedsListContainer"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">
+        <span>➕ Agregar Canal RSS Propio o Subreddit</span>
+      </div>
+      <div class="add-feed-form">
+        <input type="text" id="customFeedName" placeholder="Nombre del sitio o subreddit (ej: Infobae, r/argentina)">
+        <input type="url" id="customFeedUrl" placeholder="URL RSS o atajo subreddit (ej: r/argentina, https://sitio.com/rss)">
+        <div style="font-size: 10px; color: var(--accent); margin-top: -3px; margin-bottom: 2px;">
+          💡 <b>Atajo Reddit:</b> Escribí <code>r/argentina</code> o <code>r/technology</code> y se autoconfigura al instante.
+        </div>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <select id="customFeedCategory" class="styled-select" style="flex: 1; padding: 7px 10px; font-size: 11px;">
+            <option value="Noticias Generales">📰 Noticias Generales</option>
+            <option value="Economía y Finanzas">📈 Economía y Finanzas</option>
+            <option value="Tecnología">💻 Tecnología</option>
+            <option value="🔴 Reddit & Comunidades">🔴 Reddit & Comunidades</option>
+            <option value="Deportes">⚽ Deportes</option>
+            <option value="Internacionales">🌍 Internacionales</option>
+            <option value="Cultura y Espectáculos">🎬 Cultura y Espectáculos</option>
+            <option value="Personalizados" selected>⭐ Canales Propios / Otros</option>
+          </select>
+          <button type="button" class="btn-secondary" id="btnAddCustomFeed" style="margin-top: 0; white-space: nowrap; padding: 7px 14px;">+ Añadir Canal</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PESTAÑA 2: BARRA FLOTANTE (OPCIONAL / SECUNDARIA) -->
+  <div id="tab-bar" class="tab-content">
+    <!-- Switch Maestro: Activar / Desactivar Barra Flotante -->
+    <div class="master-power-card" id="masterPowerCard">
+      <div class="power-card-left">
+        <span class="power-indicator" id="powerIndicator">⚪</span>
+        <div>
+          <div class="power-title" id="powerTitle">Barra Flotante Desactivada</div>
+          <div class="power-desc" id="powerDesc">Opcional: marquesina sobre páginas web</div>
+        </div>
+      </div>
+      <label class="switch switch-large" title="Activar o desactivar la barra flotante opcional sobre las webs">
+        <input type="checkbox" id="barEnabled">
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <!-- Comportamiento en la Página -->
+    <div class="section">
+      <div class="section-title">
+        <span>Comportamiento en la Página</span>
+      </div>
+      <label class="checkbox-container" title="Si está activo, empuja suavemente el contenido de la web para no tapar cabeceras ni menús">
+        <input type="checkbox" id="pushPageContent" checked>
+        <span class="checkbox-label">Empujar contenido de la web (no tapar menús)</span>
+      </label>
+      <label class="checkbox-container" style="margin-top: 6px;" title="Si está activo, la barra se oculta al scrollear hacia abajo para no tapar nada de la lectura">
+        <input type="checkbox" id="autoHideOnScroll">
+        <span class="checkbox-label">Ocultar barra al scrollear hacia abajo (modo limpio)</span>
+      </label>
+      <label class="checkbox-container" style="margin-top: 6px;" title="Avisa con una notificación flotante cuando visites una web que tenga canal RSS disponible">
+        <input type="checkbox" id="rssDiscoveryEnabled" checked>
+        <span class="checkbox-label">Avisar si una web tiene canal RSS para agregar</span>
+      </label>
+      <div style="margin-top: 10px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border-color); padding-top: 8px;">
+        <span style="font-size: 11px; font-weight: 600;">⏱️ Auto-actualización de noticias:</span>
+        <select id="refreshIntervalSelect" style="padding: 4px 8px; font-size: 11px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-color); font-weight: 700; cursor: pointer;">
+          <option value="1">Cada 1 minuto</option>
+          <option value="2">Cada 2 minutos</option>
+          <option value="3">Cada 3 minutos</option>
+          <option value="5" selected>Cada 5 minutos</option>
+          <option value="10">Cada 10 minutos</option>
+          <option value="15">Cada 15 minutos</option>
+          <option value="30">Cada 30 minutos</option>
+          <option value="60">Cada 1 hora</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Modo de Presencia en Pantalla -->
+    <div class="section">
+      <div class="section-title">
+        <span>👀 Modo de Presencia en Pantalla</span>
+      </div>
+      <div class="segmented-control" style="margin-bottom: 8px;">
+        <input type="radio" id="modeAlways" name="displayMode" value="always" checked>
+        <label for="modeAlways" title="Barra siempre visible">Fija</label>
+        <input type="radio" id="modeHover" name="displayMode" value="hover">
+        <label for="modeHover" title="Oculta; sólo aparece cuando apoyás el mouse en el borde">Al borde (Hover)</label>
+        <input type="radio" id="modePill" name="displayMode" value="pill">
+        <label for="modePill" title="Se contrae en un botón discreto en la esquina">Píldora</label>
+      </div>
+      <div style="font-size: 10px; color: var(--text-muted); line-height: 1.35;">
+        • <b>Fija:</b> La marquesina siempre está visible.<br>
+        • <b>Al borde:</b> La web queda 100% limpia. La barra sólo se asoma cuando acercás el cursor al borde.<br>
+        • <b>Píldora:</b> Botón discreto en la esquina para abrirla sólo cuando querés.
+      </div>
+    </div>
+
+    <!-- Ubicación y Velocidad -->
+    <div class="section">
+      <div class="section-title">
+        <span>Ubicación y Velocidad</span>
+      </div>
+      <div class="segmented-control">
+        <input type="radio" id="posBottom" name="barPosition" value="bottom" checked>
+        <label for="posBottom">Abajo de la pantalla</label>
+        <input type="radio" id="posTop" name="barPosition" value="top">
+        <label for="posTop">Arriba de la pantalla</label>
+      </div>
+
+      <div style="margin-top: 10px;">
+        <label style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 4px;">Velocidad de marquesina</label>
+        <select id="speedSelect">
+          <option value="slow">Lenta (Lectura cómoda)</option>
+          <option value="normal" selected>Normal (Recomendada)</option>
+          <option value="fast">Rápida (Ticker ágil)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Paleta de Color: Modo Camaleón vs Colores Fijos -->
+    <div class="section">
+      <div class="section-title">
+        <span>🎨 Paleta de Color y Tema</span>
+      </div>
+
+      <!-- Switch Modo Camaleón -->
+      <label class="checkbox-container" style="margin-bottom: 8px; border-color: rgba(56, 189, 248, 0.4);" title="Detecta automáticamente el color de fondo y modo claro/oscuro del sitio web con contraste garantizado">
+        <input type="checkbox" id="adaptiveTheme">
+        <span class="checkbox-label" style="font-weight: 700; color: var(--accent);">🦎 Modo Camaleón (Mimetizar con el sitio web)</span>
+      </label>
+
+      <!-- Selector de Colores Fijos (Se atenúa si el modo camaleón está activo) -->
+      <div id="customColorsContainer">
+        <div class="color-grid">
+          <div class="color-picker-item">
+            <span>Fondo</span>
+            <input type="color" id="bgColor" value="#0f172a">
+          </div>
+          <div class="color-picker-item">
+            <span>Texto</span>
+            <input type="color" id="textColor" value="#e2e8f0">
+          </div>
+          <div class="color-picker-item">
+            <span>Enlaces</span>
+            <input type="color" id="linkColor" value="#38bdf8">
+          </div>
+          <div class="color-picker-item">
+            <span style="font-size: 10px;">Opacidad</span>
+            <div class="range-container">
+              <input type="range" id="bgOpacity" min="30" max="100" value="94" style="width: 45px;">
+              <span class="range-val" id="opacityVal">94%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 10px;">
+        <label style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 4px;">Tipografía</label>
+        <select id="fontFamilySelect">
+          <option value='system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'>System UI (Moderna)</option>
+          <option value='"Segoe UI", Tahoma, Geneva, Verdana, sans-serif'>Segoe UI / Verdana</option>
+          <option value='Georgia, Cambria, "Times New Roman", Times, serif'>Editorial (Serif)</option>
+          <option value='"SF Mono", Monaco, "Cascadia Code", monospace'>Consola (Monospace)</option>
+        </select>
+      </div>
+
+      <div style="margin-top: 10px;">
+        <label style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 4px;">Tamaño de letra</label>
+        <div class="range-container">
+          <input type="range" id="fontSizeRange" min="11" max="17" value="13">
+          <span class="range-val" id="fontSizeVal">13px</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PESTAÑA 3: NUBE & RESPALDO -->
+  <div id="tab-backup" class="tab-content">
+    <!-- Nube de Google -->
+    <div class="section">
+      <div class="section-title">
+        <span>☁️ Nube de Google Chrome</span>
+      </div>
+      <div style="display: flex; align-items: flex-start; gap: 10px; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: 8px; padding: 10px;">
+        <div style="font-size: 18px; line-height: 1;">🟢</div>
+        <div>
+          <div style="font-weight: 700; color: #4ade80; font-size: 11px; margin-bottom: 2px;">Sincronización Automática Activa</div>
+          <div style="color: #cbd5e1; font-size: 10px; line-height: 1.4;">Tus canales, colores y preferencias se guardan de forma transparente en tu cuenta de Google. Si abrís Chrome en otra computadora con tu mismo perfil, BarRSS ya estará sincronizado sin que tengas que hacer nada.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Exportar e Importar Archivo -->
+    <div class="section">
+      <div class="section-title">
+        <span>📁 Archivo de Configuración (.json)</span>
+      </div>
+      <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 10px; line-height: 1.4;">
+        Guardá una copia en tu nube favorita (Google Drive, Dropbox, OneDrive) o transferí tu configuración a otro navegador.
+      </p>
+
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <button type="button" class="btn-secondary" id="btnExportConfig" style="display: flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 12px; font-weight: 600;">
+          <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: currentColor;"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/></svg>
+          <span>Descargar Respaldo (.json)</span>
+        </button>
+
+        <label class="btn-secondary" style="display: flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 12px; cursor: pointer; text-align: center; font-weight: 600; margin: 0;">
+          <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: currentColor;"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
+          <span id="labelImportJson">Cargar Respaldo (.json)</span>
+          <input type="file" id="importConfigFile" accept=".json" style="display: none;">
+        </label>
+      </div>
+    </div>
+
+    <!-- Importar y Exportar OPML Estándar -->
+    <div class="section">
+      <div class="section-title">
+        <span id="titleOpmlSection">📡 Formato Estándar RSS (.opml)</span>
+      </div>
+      <p id="descOpmlSection" style="font-size: 11px; color: var(--text-muted); margin-bottom: 10px; line-height: 1.4;">
+        Importá o exportá todas tus suscripciones compatibles con <b>Feedly, Inoreader, NewsBlur, NetNewsWire</b> o cualquier lector RSS del mundo.
+      </p>
+
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <label class="btn-secondary" style="display: flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 12px; cursor: pointer; text-align: center; font-weight: 600; margin: 0;">
+          <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: currentColor;"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+          <span id="labelImportOpml">📥 Importar Canales desde OPML (.opml, .xml)</span>
+          <input type="file" id="importOpmlFile" accept=".opml,.xml" style="display: none;">
+        </label>
+
+        <button type="button" class="btn-secondary" id="btnExportOpml" style="display: flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 12px; font-weight: 600;">
+          <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: currentColor;"><path d="M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zm-6 .67l2.59-2.58L17 11.5l-5 5-5-5 1.41-1.41L11 12.67V3h2v9.67z"/></svg>
+          <span id="labelExportOpml">📤 Exportar Canales a OPML (.opml)</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mantenimiento y Utilidades -->
+    <div class="section">
+      <div class="section-title">
+        <span>🛠️ Mantenimiento del Sistema</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <button type="button" class="btn-secondary" id="btnPopupClearCache" style="padding: 8px; font-size: 11px; color: #fbbf24; border-color: rgba(245, 158, 11, 0.4);">
+          🗑️ Borrar Caché de Noticias
+        </button>
+        <button type="button" class="btn-secondary" id="btnPopupResetFactory" style="padding: 8px; font-size: 11px; color: #f87171; border-color: rgba(239, 68, 68, 0.4);">
+          🔄 Cambiar País / Reiniciar de Fábrica
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PESTAÑA 4: TUTORIAL / GUÍA DE INICIO -->
+  <div id="tab-tutorial" class="tab-content">
+    <div class="tutorial-card">
+      <div class="tutorial-header">
+        <span>✨ 1. Múltiples Fuentes Intercaladas</span>
+      </div>
+      <p class="tutorial-text">
+        Podés activar <b>tantos feeds como quieras</b> de tu país o del mundo. BarRSS mezcla las noticias de forma inteligente para que disfrutes de todas las categorías.
+      </p>
+    </div>
+
+    <div class="tutorial-card">
+      <div class="tutorial-header">
+        <span>📰 2. El Diario Digital Completo</span>
+      </div>
+      <p class="tutorial-text">
+        Al hacer un clic en el icono de la extensión se abre tu <b>Diario Digital</b> con 7 estilos editoriales, reloj temporizador y paginación en hojas.
+      </p>
+    </div>
+
+    <div class="tutorial-card">
+      <div class="tutorial-header">
+        <span>📑 3. Panel Lateral Compacto</span>
+      </div>
+      <p class="tutorial-text">
+        Podés abrir el panel lateral de Chrome con un clic derecho o desde Configuración para leer noticias mientras navegás.
+      </p>
+    </div>
+
+    <button class="btn-start" id="btnCompleteTutorial">
+      🚀 ¡Entendido! Empezar a usar BarRSS
+    </button>
+  </div>
+
+  <!-- Guardado Automático y Estado -->
+  <div id="saveActionsContainer">
+    <div style="text-align: center; font-size: 11px; color: #94a3b8; margin-top: 10px; margin-bottom: 6px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+      <span style="color: #4ade80; font-size: 13px;">●</span>
+      <span>Guardado automático en tiempo real activo</span>
+    </div>
+
+    <button id="btnSave" class="btn-save" style="margin-top: 4px; padding: 7px 12px; font-size: 11px; font-weight: 600; opacity: 0.75; background: rgba(255,255,255,0.06); border: 1px solid var(--border-color); box-shadow: none;">
+      <svg viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: currentColor;">
+        <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/>
+      </svg>
+      <span>Forzar Aplicación Manual</span>
+    </button>
+
+    <div id="saveAlert" class="save-alert">
+      <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: currentColor;">
+        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+      </svg>
+      <span>¡Configuración aplicada en todas las pestañas!</span>
+    </div>
+  </div>
+
+  <script src="feeds_database.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

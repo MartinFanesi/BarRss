@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="2.0">
+  <head>
+    <title>Noticias de América Latina por país y temática</title>
+  </head>
+  <body>
+
+    <outline text="Regional / Internacional">
+      <outline text="General">
+        <outline type="rss" text="BBC Mundo" title="BBC Mundo" xmlUrl="https://feeds.bbci.co.uk/mundo/rss.xml"/>
+        <outline type="rss" text="DW Español" title="DW Español" xmlUrl="https://rss.dw.com/xml/rss-sp-all"/>
+        <outline type="rss" text="CNN en Español" title="CNN en Español" xmlUrl="https://cnnespanol.cnn.com/feed/"/>
+      </outline>
+      <outline text="Economía">
+        <outline type="rss" text="AméricaEconomía" title="AméricaEconomía" xmlUrl="https://www.americaeconomia.com/feed"/>
+      </outline>
+    </outline>
+
+    <outline text="Argentina">
+      <outline text="General">
+        <outline type="rss" text="La Nación - Últimas noticias" title="La Nación - Últimas noticias" xmlUrl="https://www.lanacion.com.ar/rss/ultimas-noticias/"/>
+        <outline type="rss" text="Clarín - Último momento" title="Clarín - Último momento" xmlUrl="https://www.clarin.com/rss/ultimomomento/"/>
+        <outline type="rss" text="Infobae" title="Infobae" xmlUrl="https://www.infobae.com/feeds/rss/"/>
+        <outline type="rss" text="Página/12 - Portada" title="Página/12 - Portada" xmlUrl="https://www.pagina12.com.ar/rss/portada.xml"/>
+      </outline>
+      <outline text="Política">
+        <outline type="rss" text="La Nación - Política" title="La Nación - Política" xmlUrl="https://www.lanacion.com.ar/rss/politica/"/>
+        <outline type="rss" text="Clarín - Política" title="Clarín - Política" xmlUrl="https://www.clarin.com/rss/politica/"/>
+        <outline type="rss" text="Página/12 - El País" title="Página/12 - El País" xmlUrl="https://www.pagina12.com.ar/rss/el-pais.xml"/>
+      </outline>
+      <outline text="Economía">
+        <outline type="rss" text="La Nación - Economía" title="La Nación - Economía" xmlUrl="https://www.lanacion.com.ar/rss/economia/"/>
+        <outline type="rss" text="Clarín - Economía" title="Clarín - Economía" xmlUrl="https://www.clarin.com/rss/economia/"/>
+        <outline type="rss" text="Ámbito - Economía" title="Ámbito - Economía" xmlUrl="https://www.ambito.com/rss/economia/"/>
+      </outline>
+      <outline text="Deportes">
+        <outline type="rss" text="La Nación - Deportes" title="La Nación - Deportes" xmlUrl="https://www.lanacion.com.ar/rss/deportes/"/>
+        <outline type="rss" text="Clarín - Deportes" title="Clarín - Deportes" xmlUrl="https://www.clarin.com/rss/deportes/"/>
+      </outline>
+      <outline text="Tecnología">
+        <outline type="rss" text="La Nación - Tecnología" title="La Nación - Tecnología" xmlUrl="https://www.lanacion.com.ar/rss/tecnologia/"/>
+        <outline type="rss" text="Clarín - Tecnología" title="Clarín - Tecnología" xmlUrl="https://www.clarin.com/rss/tecnologia/"/>
+      </outline>
+      <outline text="Cultura">
+        <outline type="rss" text="La Nación - Cultura" title="La Nación - Cultura" xmlUrl="https://www.lanacion.com.ar/rss/cultura/"/>
+        <outline type="rss" text="Clarín - Cultura" title="Clarín - Cultura" xmlUrl="https://www.clarin.com/rss/cultura/"/>
+      </outline>
+    </outline>
+
+    <outline text="Bolivia">
+      <outline text="General">
+        <outline type="rss" text="El Deber" title="El Deber" xmlUrl="https://eldeber.com.bo/feed/"/>
+        <outline type="rss" text="Los Tiempos" title="Los Tiempos" xmlUrl="https://www.lostiempos.com/feed/"/>
+        <outline type="rss" text="Página Siete" title="Página Siete" xmlUrl="https://www.paginasiete.bo/feed/"/>
+        <outline type="rss" text="Brújula Digital" title="Brújula Digital" xmlUrl="https://brujuladigital.net/feed/"/>
+      </outline>
+      <outline text="Política">
+        <outline type="rss" text="Página Siete - Política" title="Página Siete - Política" xmlUrl="https://www.paginasiete.bo/category/politica/feed/"/>
+        <outline type="rss" text="Brújula Digital - Política" title="Brújula Digital - Política" xmlUrl="https://brujuladigital.net/category/politica/feed/"/>
+      </outline>
+      <outline text="Economía">
+        <outline type="rss" text="Página Siete - Economía" title="Página Siete - Economía" xmlUrl="https://www.paginasiete.bo/category/economia/feed/"/>
+      </outline>
+      <outline text="Deportes">
+        <outline type="rss" text="Página Siete - Deportes" title="Página Siete - Deportes" xmlUrl="https://www.paginasiete.bo/category/deportes/feed/"/>
+      </outline>
+    </outline>
+
+    <outline text="Brasil">
+      <outline text="General">
+        <outline type="rss" text="Folha de S.Paulo" title="Folha de S.Paulo" xmlUrl="https://feeds.folha.uol.com.br/folha/rss.xml"/>
+        <outline type="rss" text="G1" title="G1" xmlUrl="https://g1.globo.com/rss/g1.xml"/>
+        <outline type="rss" text="CNN Brasil" title="CNN Brasil" xmlUrl="https://www.cnnbrasil.com.br/feed/"/>
+      </outline>
+      <outline text="Política">
+        <outline type="rss" text="Folha - Poder" title="Folha - Poder" xmlUrl="https://feeds.folha.uol.com.br/poder/rss.xml"/>
+        <outline type="rss" text="G1 - Política" title="G1 - Política" xmlUrl="https://g1.globo.com/rss/g1/politica/"/>
+        <outline type="rss" text="CNN Brasil - Política" title="CNN Brasil - Política" xmlUrl="https://www.cnnbrasil.com.br/category/politica/feed/"/>
+      </outline>
+      <outline text="Economía">
+        <outline type="rss" text="Folha - Mercado" title="Folha - Mercado" xmlUrl="https://feeds.folha.uol.com.br/mercado/rss.xml"/>
+        <outline type="rss" text="G1 - Economía" title="G1 - Economía" xmlUrl="https://g1.globo.com/rss/g1/economia/"/>
+        <outline type="rss" text="CNN Brasil - Economía" title="CNN Brasil - Economía" xmlUrl="https://www.cnnbrasil.com.br/category/economia/feed/"/>
+      </outline>
+      <outline text="Deportes">
+        <outline type="rss" text="Folha - Esporte" title="Folha - Esporte" xmlUrl="https://feeds.folha.uol.com.br/esporte/rss.xml"/>
+      </outline>
+      <outline text="Tecnología">
+        <outline type="rss" text="Folha - Tec" title="Folha - Tec" xmlUrl="https://feeds.folha.uol.com.br/tec/rss.xml"/>
+        <outline type="rss" text="G1 - Tecnología" title="G1 - Tecnología" xmlUrl="https://g1.globo.com/rss/g1/tecnologia/"/>
+      </outline>
+      <outline text="Cultura">
+        <outline type="rss" text="Folha - Ilustrada" title="Folha - Ilustrada" xmlUrl="https://feeds.folha.uol.com.br/ilustrada/rss.xml"/>
+      </outline>
+    </outline>
+
+    <outline text="Chile">
+      <outline text="General">
+        <outline type="rss" text="La Tercera" title="La Tercera" xmlUrl="https://www.latercera.com/arc/outboundfeeds/rss/"/>
+        <outline type="rss" text="Emol" title="Emol" xmlUrl="https://www.emol.com/rss/"/>
+        <outline type="rss" text="Cooperativa - Últimas noticias" title="Cooperativa - Últimas noticias" xmlUrl="https://www.cooperativa.cl/rss/ultimas-noticias/"/>
+        <outline type="rss" text="BioBioChile - Últimas noticias" title="BioBioChile - Últimas noticias" xmlUrl="https://www.biobiochile.cl/rss/ultimas-noticias.xml"/>
+        <outline type="rss" text="El Mostrador" title="El Mostrador" xmlUrl="https://www.elmostrador.cl/feed/"/>
+      </outline>
+      <outline text="Política">
+        <outline type="rss" text="Emol - Nacional" title="Emol - Nacional" xmlUrl="https://www.emol.com/rss/nacional/"/>
+        <outline type="rss" text="El Mostrador - Política" title="El Mostrador - Política" xmlUrl="https://www.elmostrador.cl/category/politica/feed/"/>
+      </outline>
+      <outline text="Economía">
+        <outline type="rss" text="Emol - Economía" title="Emol - Economía" xmlUrl="https://www.emol.com/rss/economia/"/>
+        <outline type="rss" text="Cooperativa - Economía" title="Cooperativa - Economía" xmlUrl="https://www.cooperativa.cl/rss/economia/"/>
+      </outline>
+      <outline text="Deportes">
+        <outline type="rss" text="Emol - Deportes" title="Emol - Deportes" xmlUrl="https://www.emol.com/rss/deportes/"/>
+        <outline type="rss" text="Cooperativa - Deportes" title="Cooperativa - Deportes" xmlUrl="https://www.cooperativa.cl/rss/deportes/"/>
+      </outline>
+      <outline text="Tecnología">
+        <outline type="rss" text="Emol - Tecnología" title="Emol - Tecnología" xmlUrl="https://www.emol.com/rss/tecnologia/"/>
+      </outline>
+      <outline text="Cultura">
+        <outline type="rss" text="Emol - Cultura" title="Emol - Cultura" xmlUrl="https://www.emol.com/rss/cultura/"/>
+        <outline type="rss" text="El Mostrador - Cultura" title="El Mostrador - Cultura" xmlUrl="https://www.elmostrador.cl/category/cultura/feed/"/>
+      </outline>
+    </outline>
+
+    <outline text="Colombia">
+      <outline text="General">
+        <outline type="rss" text="El Tiempo" title="El Tiempo" xmlUrl="https://www.eltiempo.com/arc/outboundfeeds/rss/"/>
+        <outline type="rss" text="El Espectador" title="El Espectador" xmlUrl="https://www.elespectador.com/arc/outboundfeeds/rss/"/>
+        <outline type="rss" text="Semana" title="Semana" xmlUrl="https://www.semana.com/feed/"/>
+        <outline type="rss" text="La Silla Vacía" title="La Silla Vacía" xmlUrl="https://www.lasillavacia.com/feed/"/>
+      </outline>
+      <outline text="Política">
+        <outline type="rss" text="Semana - Política" title="Semana - Política" xmlUrl="https://www.semana.com/category/politica/feed/"/>
+        <outline type="rss" text="La Silla Vacía - Política" title="La Silla Vacía - Política" xmlUrl="https://www.lasillavacia.com/category/politica/feed/"/>
+      </outline>
+      <outline text="Economía">
+        <outline type="rss" text="Valora Analitik - Economía" title="Valora Analitik - Economía" xmlUrl="https://www.valoraanalitik.com/category/economia/feed/"/>
+      </outline>
+      <outline text="Deportes">
+        <outline type="rss" text="Semana - Deportes" title="Semana - Deportes" xmlUrl="https://www.semana.com/category/deportes/feed/"/>
+      </outline>
+      <outline text="Tecnología">
+        <outline type="rss" text="Semana - Tecnología" title="Semana - Tecnología" xmlUrl="https://www.semana.com/category/tecnologia/feed/"/>
+      </outline>
+      <outline text="Cultura">
+        <outline type="rss" text="Semana - Cultura" title="Semana - Cultura" xmlUrl="https://www.semana.com/category/cultura/feed/"/>
+      </outline>
+    </outline>
+
+    <outline text="Costa Rica">
+      <outline text="General">
+        <outline type="rss" text="La Nación" title="La Nación" xmlUrl="https://www.nacion.com/arc/outboundfeeds/rss/"/>
+        <outline type="rss" text="Amelia Rueda" title="Amelia Rueda" xmlUrl="https://www.ameliarueda.com/feed/"/>
+        <outline type="rss" text="CRHoy" title="CRHoy" xmlUrl="https://www.crhoy.com/feed/"/>
+        <outline type="rss" text="El Financiero" title="El Financiero" xmlUrl="https://www.elfinancierocr.com/feed/"/>
+      </outline>
+      <outline text="Política">
+        <outline type="rss" text="Amelia Rueda - Política" title="Amelia Rueda - Política" xmlUrl="https://www.ameliarueda.com/category/politica/feed/"/>
+        <outline type="rss" text="CRHoy - Política" title="CRHoy - Política" xmlUrl="https://www.crhoy.com/category/politica/feed/"/>
+      </outline>
+      <outline text="Economía">
+        <outline type="rss" text="El Financiero - Economía" title="El Financiero - Economía" xmlUrl="https://www.elfinancierocr.com/category/economia/feed/"/>
+      </outline>
+      <outline text="Deportes">
+        <outline type="rss" text="CRHoy - Deportes" title="CRHoy - Deportes" xmlUrl="https://www.crhoy.com/category/deportes/feed/"/>
+      </outline>
+      <outline text="Tecnología">
+        <outline type="rss" text="CRHoy - Tecnología" title="CRHoy - Tecnología" xmlUrl="https://www.crhoy.com/category/tecnologia/feed/"/>
+      </outline>
+    </outline>
+
+    <outline text="Cuba">
+      <outline text="General">
+        <outline type="rss" text="Cubadebate" title="Cubadebate" xmlUrl="https://www.cubadebate.cu/feed/"/>
+        <outline type="rss" text="14ymedio" title="14ymedio" xmlUrl="https://www.14ymedio.com/feed/"/>
+        <outline type="rss" text="El Toque" title="El Toque" xmlUrl="https://eltoque.com/feed/"/>
+      </outline>
+      <outline text="Política">
+        <outline type="rss" text="Cubadebate - Política" title="Cubadebate - Política" xmlUrl="https://www.cubadebate.cu/category/politica/feed/"/>
+        <outline type="rss" text="14ymedio - Política" title="14ymedio - Política" xmlUrl="https://www.14ymedio.com/category/politica/feed/"/>
+      </outline>
+      <outline text="Economía">
+        <outline type="rss" text="Cubadebate - Economía" title="Cubadebate - Economía" xmlUrl="https://www.cubadebate.cu/category/economia/feed/"/>
+        <outline type="rss" text="El Toque - Economía" title="El Toque - Economía" xmlUrl="https://eltoque.com/category/economia/feed/"/>
+      </outline>
+      <outline text="Cultura">
+        <outline type="rss" text="Cubadebate - Cultura" title="Cubadebate - Cultura" xmlUrl="https://www.cubadebate.cu/category/cultura/feed/"/>
+      </outline>
+    </outline>
+
+    <outline text="Ecuador">
+      <outline text="General">
+        <outline type="rss" text="El Universo" title="El Universo" xmlUrl="https://www.eluniverso.com/arc/outboundfeeds/rss/"/>
+        <outline type="rss" text="El Comercio" title="El Comercio" xmlUrl="https://www.elcomercio.com/feed/"/>
+        <outline type="rss" text="Primicias" title="Primicias" xmlUrl="https://www.primicias.ec/feed/"/>
+        <outline type="rss" text="GK" title="GK" xmlUrl="https://gk.city/feed/"/>
+      </outline>
+      <outline text="Política">
+        <outline type="rss" text="Primicias - Política" title="Primicias - Política" xmlUrl="https://www.primicias.ec/category/politica/feed/"/>
+        <outline type="rss" text="El Comercio - Política" title="El Comercio - Política" xmlUrl="https://www.elcomercio.com/category/politica/feed/"/>
+      </outline>
+      <outline text="Economía">
+        <outline type="rss" text="Primicias - Economía" title="Primicias - Economía" xmlUrl="https://www.primicias.ec/category/economia/feed/"/>
+      </outline>
+      <outline text="Deportes">
+        <outline type="rss" text="Primicias - Deportes" title="Primicias - Deportes" xmlUrl="https://www.primicias.ec/category/deportes/feed/"/>
+      </outline>
+      <outline text="Tecnología">
+        <outline type="rss" text="GK - Tecnología" title="GK - Tecnología" xmlUrl="https://gk.city/category/tecnologia/feed/"/>
+      </outline>
+    </outline>
+
+    <outline text="El Salvador">
+      <outline text="General">
+        <outline type="rss" text="El Faro" title="El Faro" xmlUrl="https://elfaro.net/feed/"/>
+        <outline type="rss" text="GatoEncerrado" title="GatoEncerrado" xmlUrl="https://revistagatoencerrado.net/feed/"/>
+        <outline type="rss" text="La Prensa Gráfica" title="La Prensa Gráfica" xmlUrl="https://www.laprensagrafica.com/rss/ultimas-noticias/"/>
+      </outline>
+      <outline text="Política">
+        <outline type="rss" text="El Faro - Política" title="El Faro - Política" xmlUrl="https://elfaro.net/category/politica/feed/"/>
+        <outline type="rss" text="GatoEncerrado - Política" title="GatoEncerrado - Política" xmlUrl="https://revistagatoencerrado.net/category/politica/feed/"/>
+      </outline>
+      <outline text="Cultura">
+        <outline type="rss" text="GatoEncerrado - Cultura" title="GatoEncerrado - Cultura" xmlUrl="https://revistagatoencerrado.net/category/cultura/feed/"/>
+      </outline>
+    </outline>
+
+    <outline text="Guatemala">
+      <outline text="General">
+        <outline type="rss" text="Prensa Libre" title="Prensa Libre" xmlUrl="https://www.prensalibre.com/arc/outboundfeeds/rss/"/>
+        <outline type="rss" text="elPeriódico" title="elPeriódico" xmlUrl="https://elperiodico.com.gt/feed/"/>
+        <outline type="rss" text="Plaza Pública" title="Plaza Pública" xmlUrl="https://www.plazapublica.com.gt/feed/"/>
+        <outline type="rss" text="Soy502" title="Soy502" xmlUrl="https://www.soy502.com/feed/"/>
+      </outline>
+      <outline text="Política">
+        <outline type="rss" text="elPeriódico - Política" title="elPeriódico - Política" xmlUrl="https://elperiodico.com.gt/category/politica/feed/"/>
+        <outline type="rss" text="Plaza Pública - Política" title="Plaza Pública - Política" xmlUrl="https://www.plazapublica.com.gt/category/politica/feed/"/>
+      </outline>
+    </outline>
+
+    <outline text="Honduras">
+      <outline text="General">
+        <outline type="rss" text="Confidencial Honduras" title="Confidencial Honduras" xmlUrl="https://confidencial.hn/feed/"/>
+        <outline type="rss" text="La Prensa" title="La Prensa" xmlUrl="https://www.laprensa.hn/rss/ultimas-noticias/"/>
+      </outline>
+      <outline text="Política">
+        <outline type="rss" text="Confidencial Honduras - Política" title="Confidencial Honduras - Política" xmlUrl="https://confidencial.hn/category/politica/feed/"/>
+      </outline>
+    </outline>
+
+    <outline text="México">
+      <outline text="General">
+        <outline type="rss" text="Animal Político" title="Animal Político" xmlUrl="https://www.animalpolitico.com/feed/"/>
+        <outline type="rss" text="Aristegui Noticias" title="Aristegui Noticias" xmlUrl="https://aristeguinoticias.com/feed/"/>
+        <outline type="rss" text="SinEmbargo" title="SinEmbargo" xmlUrl="https://www.sinembargo.mx/feed/"/>
+        <outline type="rss" text="Proceso" title="Proceso" xmlUrl="https://www.proceso.com.mx/feed/"/>
+        <outline type="rss" text="La Jornada - Portada" title="La Jornada - Portada" xmlUrl="https://www.jornada.com.mx/rss/portada.xml"/>
+      </outline>
+      <outline text="Política">
+        <outline type="rss" text="Animal Político - Política" title="Animal Político - Política" xmlUrl="https://www.animalpolitico.com/category/politica/feed/"/>
+        <outline type="rss" text="Aristegui Noticias - Política" title="Aristegui Noticias - Política" xmlUrl="https://aristeguinoticias.com/category/politica/feed/"/>
+        <outline type="rss" text="Proceso - Política" title="Proceso - Política" xmlUrl="https://www.proceso.com.mx/category/politica/feed/"/>
+        <outline type="rss" text="La Jornada - Política" title="La Jornada - Política" xmlUrl="https://www.jornada.com.mx/rss/politica.xml"/>
+      </outline>
+      <outline text="Economía">
+        <outline type="rss" text="El Economista" title="El Economista" xmlUrl="https://www.eleconomista.com.mx/rss/ultimas-noticias/"/>
+        <outline type="rss" text="La Jornada - Economía" title="La Jornada - Economía" xmlUrl="https://www.jornada.com.mx/rss/economia.xml"/>
+      </outline>
+      <outline text="Deportes">
+        <outline type="rss" text="La Jornada - Deportes" title="La Jornada - Deportes" xmlUrl="https://www.jornada.com.mx/rss/deportes.xml"/>
+        <outline type="rss" text="Animal Político - Deportes" title="Animal Político - Deportes" xmlUrl="https://www.animalpolitico.com/category/deportes/feed/"/>
+      </outline>
+      <outline text="Tecnología">
+        <outline type="rss" text="Proceso - Tecnología" title="Proceso - Tecnología" xmlUrl="https://www.proceso.com.mx/category/tecnologia/feed/"/>
+      </outline>
+      <outline text="Cultura">
+        <outline type="rss" text="La Jornada - Cultura" title="La Jornada - Cultura" xmlUrl="https://www.jornada.com.mx/rss/cultura.xml"/>
+        <outline type="rss" text="Proceso - Cultura" title="Proceso - Cultura" xmlUrl="https://www.proceso.com.mx/category/cultura/feed/"/>
+      </outline>
+    </outline>
+
+    <outline text="Nicaragua">
+      <outline text="General">
+        <outline type="rss" text="Confidencial" title="Confidencial" xmlUrl="https://confidencial.digital/feed/"/>
+        <outline type="rss" text="La Prensa" title="La Prensa" xmlUrl="https://www.laprensa.com.ni/rss/ultimas-noticias/"/>
+      </outline>
+      <outline text="Política">
+        <outline type="rss" text="Confidencial - Política" title="Confidencial - Política" xmlUrl="https://confidencial.digital/category/politica/feed/"/>
+      </outline>
+    </outline>
+
+    <outline text="Panamá">
+      <outline text="General">
+        <outline type="rss" text="La Prensa" title="La Prensa" xmlUrl="https://www.prensa.com/arc/outboundfeeds/rss/"/>
+        <outline type="rss" text="Crítica" title="Crítica" xmlUrl="https://www.critica.com.pa/feed/"/>
+      </outline>
+      <outline text="Política">
+        <outline type="rss" text="Crítica - Política" title="Crítica - Política" xmlUrl="https://www.critica.com.pa/category/politica/feed/"/>
+      </outline>
+    </outline>
+
+    <outline text="Paraguay">
+      <outline text="General">
+        <outline type="rss" text="ABC Color" title="ABC Color" xmlUrl="https://www.abc.com.py/arc/outboundfeeds/rss/"/>
+        <outline type="rss" text="Última Hora" title="Última Hora" xmlUrl="https://www.ultimahora.com/rss/ultimas-noticias/"/>
+        <outline type="rss" text="La Nación" title="La Nación" xmlUrl="https://www.lanacion.com.py/feed/"/>
+      </outline>
+      <outline text="Política">
+        <outline type="rss" text="La Nación - Política" title="La Nación - Política" xmlUrl="https://www.lanacion.com.py/category/politica/feed/"/>
+      </outline>
+      <outline text="Economía">
+        <outline type="rss" text="La Nación - Economía" title="La Nación - Economía" xmlUrl="https://www.lanacion.com.py/category/economia/feed/"/>
+      </outline>
+      <outline text="Deportes">
+        <outline type="rss" text="La Nación - Deportes" title="La Nación - Deportes" xmlUrl="https://www.lanacion.com.py/category/deportes/feed/"/>
+      </outline>
+    </outline>
+
+    <outline text="Perú">
+      <outline text="General">
+        <outline type="rss" text="El Comercio" title="El Comercio" xmlUrl="https://elcomercio.pe/arc/outboundfeeds/rss/"/>
+        <outline type="rss" text="La República - Últimas noticias" title="La República - Últimas noticias" xmlUrl="https://larepublica.pe/rss/ultimas-noticias/"/>
+        <outline type="rss" text="RPP - Últimas noticias" title="RPP - Últimas noticias" xmlUrl="https://rpp.pe/rss/ultimas-noticias/"/>
+        <outline type="rss" text="OjoPúblico" title="OjoPúblico" xmlUrl="https://ojo-publico.com/feed/"/>
+      </outline>
+      <outline text="Política">
+        <outline type="rss" text="La República - Política" title="La República - Política" xmlUrl="https://larepublica.pe/rss/politica/"/>
+        <outline type="rss" text="RPP - Política" title="RPP - Política" xmlUrl="https://rpp.pe/rss/politica/"/>
+        <outline type="rss" text="OjoPúblico - Política" title="OjoPúblico - Política" xmlUrl="https://ojo-publico.com/category/politica/feed/"/>
+      </outline>
+      <outline text="Economía">
+        <outline type="rss" text="La República - Economía" title="La República - Economía" xmlUrl="https://larepublica.pe/rss/economia/"/>
+      </outline>
+      <outline text="Deportes">
+        <outline type="rss" text="La República - Deportes" title="La República - Deportes" xmlUrl="https://larepublica.pe/rss/deportes/"/>
+        <outline type="rss" text="RPP - Deportes" title="RPP - Deportes" xmlUrl="https://rpp.pe/rss/deportes/"/>
+      </outline>
+      <outline text="Tecnología">
+        <outline type="rss" text="La República - Tecnología" title="La República - Tecnología" xmlUrl="https://larepublica.pe/rss/tecnologia/"/>
+      </outline>
+      <outline text="Cultura">
+        <outline type="rss" text="La República - Cultura" title="La República - Cultura" xmlUrl="https://larepublica.pe/rss/cultura/"/>
+      </outline>
+    </outline>
+
+    <outline text="República Dominicana">
+      <outline text="General">
+        <outline type="rss" text="Acento" title="Acento" xmlUrl="https://acento.com.do/feed/"/>
+        <outline type="rss" text="Diario Libre - Últimas noticias" title="Diario Libre - Últimas noticias" xmlUrl="https://www.diariolibre.com/rss/ultimas-noticias/"/>
+        <outline type="rss" text="Listín Diario" title="Listín Diario" xmlUrl="https://www.listindiario.com/arc/outboundfeeds/rss/"/>
+      </outline>
+      <outline text="Política">
+        <outline type="rss" text="Acento - Política" title="Acento - Política" xmlUrl="https://acento.com.do/category/politica/feed/"/>
+        <outline type="rss" text="Diario Libre - Política" title="Diario Libre - Política" xmlUrl="https://www.diariolibre.com/rss/politica/"/>
+      </outline>
+      <outline text="Economía">
+        <outline type="rss" text="Acento - Economía" title="Acento - Economía" xmlUrl="https://acento.com.do/category/economia/feed/"/>
+      </outline>
+      <outline text="Deportes">
+        <outline type="rss" text="Diario Libre - Deportes" title="Diario Libre - Deportes" xmlUrl="https://www.diariolibre.com/rss/deportes/"/>
+      </outline>
+    </outline>
+
+    <outline text="Uruguay">
+      <outline text="General">
+        <outline type="rss" text="la diaria" title="la diaria" xmlUrl="https://ladiaria.com.uy/rss/"/>
+        <outline type="rss" text="El País - Portada" title="El País - Portada" xmlUrl="https://www.elpais.com.uy/rss/portada/"/>
+        <outline type="rss" text="El Observador - Últimas noticias" title="El Observador - Últimas noticias" xmlUrl="https://www.elobservador.com.uy/rss/ultimas-noticias/"/>
+        <outline type="rss" text="Montevideo Portal - Últimas noticias" title="Montevideo Portal - Últimas noticias" xmlUrl="https://www.montevideo.com.uy/rss/ultimas-noticias/"/>
+      </outline>
+      <outline text="Política">
+        <outline type="rss" text="la diaria - Política" title="la diaria - Política" xmlUrl="https://ladiaria.com.uy/rss/politica/"/>
+        <outline type="rss" text="El País - Política" title="El País - Política" xmlUrl="https://www.elpais.com.uy/rss/politica/"/>
+      </outline>
+      <outline text="Economía">
+        <outline type="rss" text="la diaria - Economía" title="la diaria - Economía" xmlUrl="https://ladiaria.com.uy/rss/economia/"/>
+        <outline type="rss" text="El País - Economía" title="El País - Economía" xmlUrl="https://www.elpais.com.uy/rss/economia/"/>
+      </outline>
+      <outline text="Deportes">
+        <outline type="rss" text="El País - Deportes" title="El País - Deportes" xmlUrl="https://www.elpais.com.uy/rss/deportes/"/>
+        <outline type="rss" text="Montevideo Portal - Deportes" title="Montevideo Portal - Deportes" xmlUrl="https://www.montevideo.com.uy/rss/deportes/"/>
+      </outline>
+      <outline text="Cultura">
+        <outline type="rss" text="El País - Cultura" title="El País - Cultura" xmlUrl="https://www.elpais.com.uy/rss/cultura/"/>
+      </outline>
+    </outline>
+
+    <outline text="Venezuela">
+      <outline text="General">
+        <outline type="rss" text="El Nacional" title="El Nacional" xmlUrl="https://www.elnacional.com/feed/"/>
+        <outline type="rss" text="Efecto Cocuyo" title="Efecto Cocuyo" xmlUrl="https://efectococuyo.com/feed/"/>
+        <outline type="rss" text="Tal Cual" title="Tal Cual" xmlUrl="https://talcualdigital.com/feed/"/>
+        <outline type="rss" text="Runrun" title="Runrun" xmlUrl="https://runrun.es/feed/"/>
+        <outline type="rss" text="Prodavinci" title="Prodavinci" xmlUrl="https://prodavinci.com/feed/"/>
+      </outline>
+      <outline text="Política">
+        <outline type="rss" text="Efecto Cocuyo - Política" title="Efecto Cocuyo - Política" xmlUrl="https://efectococuyo.com/category/politica/feed/"/>
+        <outline type="rss" text="Tal Cual - Política" title="Tal Cual - Política" xmlUrl="https://talcualdigital.com/category/politica/feed/"/>
+        <outline type="rss" text="Runrun - Política" title="Runrun - Política" xmlUrl="https://runrun.es/category/politica/feed/"/>
+      </outline>
+      <outline text="Economía">
+        <outline type="rss" text="El Nacional - Economía" title="El Nacional - Economía" xmlUrl="https://www.elnacional.com/category/economia/feed/"/>
+        <outline type="rss" text="Efecto Cocuyo - Economía" title="Efecto Cocuyo - Economía" xmlUrl="https://efectococuyo.com/category/economia/feed/"/>
+      </outline>
+      <outline text="Deportes">
+        <outline type="rss" text="Efecto Cocuyo - Deportes" title="Efecto Cocuyo - Deportes" xmlUrl="https://efectococuyo.com/category/deportes/feed/"/>
+      </outline>
+      <outline text="Tecnología">
+        <outline type="rss" text="Efecto Cocuyo - Tecnología" title="Efecto Cocuyo - Tecnología" xmlUrl="https://efectococuyo.com/category/tecnologia/feed/"/>
+      </outline>
+      <outline text="Cultura">
+        <outline type="rss" text="Prodavinci - Cultura" title="Prodavinci - Cultura" xmlUrl="https://prodavinci.com/category/cultura/feed/"/>
+      </outline>
+    </outline>
+
+  </body>
+</opml>

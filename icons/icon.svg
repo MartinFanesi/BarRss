@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Gradiente Dorado Metálico de Lujo (Bisel y Corona) -->
+    <linearGradient id="goldMetal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fffbeb" />
+      <stop offset="20%" stop-color="#fde047" />
+      <stop offset="45%" stop-color="#f59e0b" />
+      <stop offset="75%" stop-color="#d97706" />
+      <stop offset="100%" stop-color="#78350f" />
+    </linearGradient>
+
+    <!-- Gradiente Dorado Claro para Ticks y Manecillas -->
+    <linearGradient id="goldBright" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#d97706" />
+      <stop offset="50%" stop-color="#fef08a" />
+      <stop offset="100%" stop-color="#ffffff" />
+    </linearGradient>
+
+    <!-- Gradiente Esfera Dial Azul Noche Ultra Deep -->
+    <radialGradient id="dialBg" cx="50%" cy="45%" r="55%">
+      <stop offset="0%" stop-color="#1e293b" />
+      <stop offset="60%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#020617" />
+    </radialGradient>
+
+    <!-- Gradiente Naranja Neón RSS -->
+    <linearGradient id="rssNeon" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ea580c" />
+      <stop offset="50%" stop-color="#f97316" />
+      <stop offset="100%" stop-color="#fed7aa" />
+    </linearGradient>
+
+    <!-- Reflejo de Cristal de Reloj -->
+    <linearGradient id="glassShine" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.35" />
+      <stop offset="30%" stop-color="#ffffff" stop-opacity="0.1" />
+      <stop offset="60%" stop-color="#ffffff" stop-opacity="0" />
+    </linearGradient>
+
+    <!-- Sombra suave para fondo transparente -->
+    <filter id="watchShadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="9" />
+      <feOffset dx="0" dy="8" result="offsetblur" />
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.45" />
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <g filter="url(#watchShadow)">
+    
+    <!-- 1. Anilla Superior Vintage (Crown Ring) -->
+    <circle cx="256" cy="65" r="44" fill="none" stroke="url(#goldMetal)" stroke-width="16" />
+    <!-- Sombra interior anilla -->
+    <circle cx="256" cy="65" r="36" fill="none" stroke="#78350f" stroke-width="3" opacity="0.4" />
+
+    <!-- 2. Corona / Pulsador del Cronómetro -->
+    <path d="M 234 100 L 278 100 A 4 4 0 0 1 282 104 L 280 120 L 232 120 L 230 104 A 4 4 0 0 1 234 100 Z" fill="url(#goldMetal)" stroke="#78350f" stroke-width="3" />
+    <!-- Cuello de unión -->
+    <rect x="244" y="118" width="24" height="12" fill="url(#goldMetal)" />
+
+    <!-- 3. Caja Exterior del Reloj de Bolsillo (Bisel Principal de Oro) -->
+    <circle cx="256" cy="295" r="185" fill="url(#goldMetal)" stroke="#78350f" stroke-width="6" />
+    <!-- Bisel Interior Titanio/Oscuro -->
+    <circle cx="256" cy="295" r="168" fill="none" stroke="#0f172a" stroke-width="8" />
+    <circle cx="256" cy="295" r="160" fill="none" stroke="url(#goldMetal)" stroke-width="3" />
+
+    <!-- 4. Esfera Central (Dial del Reloj) -->
+    <circle cx="256" cy="295" r="156" fill="url(#dialBg)" />
+
+    <!-- 5. Ticks Horarios / Cronómetro Elegantes -->
+    <!-- 12 Ticks principales -->
+    <!-- 12 h -->
+    <line x1="256" y1="147" x2="256" y2="163" stroke="url(#goldBright)" stroke-width="6" stroke-linecap="round" />
+    <!-- 3 h -->
+    <line x1="404" y1="295" x2="388" y2="295" stroke="url(#goldBright)" stroke-width="6" stroke-linecap="round" />
+    <!-- 6 h -->
+    <line x1="256" y1="443" x2="256" y2="427" stroke="url(#goldBright)" stroke-width="6" stroke-linecap="round" />
+    <!-- 9 h -->
+    <line x1="108" y1="295" x2="124" y2="295" stroke="url(#goldBright)" stroke-width="6" stroke-linecap="round" />
+
+    <!-- Ticks Secundarios (1, 2, 4, 5, 7, 8, 10, 11) -->
+    <line x1="326" y1="166" x2="318" y2="180" stroke="#fbbf24" stroke-width="3.5" stroke-linecap="round" opacity="0.8" />
+    <line x1="385" y1="225" x2="371" y2="233" stroke="#fbbf24" stroke-width="3.5" stroke-linecap="round" opacity="0.8" />
+    <line x1="385" y1="365" x2="371" y2="357" stroke="#fbbf24" stroke-width="3.5" stroke-linecap="round" opacity="0.8" />
+    <line x1="326" y1="424" x2="318" y2="410" stroke="#fbbf24" stroke-width="3.5" stroke-linecap="round" opacity="0.8" />
+    <line x1="186" y1="424" x2="194" y2="410" stroke="#fbbf24" stroke-width="3.5" stroke-linecap="round" opacity="0.8" />
+    <line x1="127" y1="365" x2="141" y2="357" stroke="#fbbf24" stroke-width="3.5" stroke-linecap="round" opacity="0.8" />
+    <line x1="127" y1="225" x2="141" y2="233" stroke="#fbbf24" stroke-width="3.5" stroke-linecap="round" opacity="0.8" />
+    <line x1="186" y1="166" x2="194" y2="180" stroke="#fbbf24" stroke-width="3.5" stroke-linecap="round" opacity="0.8" />
+
+    <!-- 6. Ondas RSS Integradas en la Esfera (Brillantes y Nítidas) -->
+    <!-- Punto central RSS -->
+    <circle cx="210" cy="345" r="18" fill="url(#rssNeon)" stroke="#fde047" stroke-width="4" />
+
+    <!-- Onda 1 -->
+    <path d="M 210 285 A 60 60 0 0 1 270 345" fill="none" stroke="url(#rssNeon)" stroke-width="16" stroke-linecap="round" />
+
+    <!-- Onda 2 -->
+    <path d="M 210 230 A 115 115 0 0 1 325 345" fill="none" stroke="url(#rssNeon)" stroke-width="18" stroke-linecap="round" />
+
+    <!-- 7. Manecilla Dinámica de Reloj (Precisión de Oro) -->
+    <g transform="rotate(38, 256, 295)">
+      <!-- Aguja principal en punta -->
+      <polygon points="253,295 256,165 259,295 256,335" fill="url(#goldBright)" stroke="#92400e" stroke-width="1.5" />
+      <!-- Contrapeso circular inferior -->
+      <circle cx="256" cy="325" r="7" fill="url(#goldMetal)" stroke="#78350f" stroke-width="2" />
+      <!-- Pivote central -->
+      <circle cx="256" cy="295" r="12" fill="url(#goldMetal)" stroke="#78350f" stroke-width="3" />
+      <circle cx="256" cy="295" r="5" fill="#fffbeb" />
+    </g>
+
+    <!-- 8. Reflejo Curvo en el Cristal Superior (Luxury Glass Finish) -->
+    <path d="M 140 210 A 145 145 0 0 1 372 210 C 310 240 200 240 140 210 Z" fill="url(#glassShine)" />
+
+  </g>
+</svg>

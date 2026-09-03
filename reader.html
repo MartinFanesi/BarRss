@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El Diario BarRSS - Lector Editorial de Noticias</title>
+  <link rel="icon" type="image/png" href="icons/icon48.png">
+  <link rel="stylesheet" href="reader.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;1,400&family=Merriweather:ital,wght@0,400;0,700;1,300&family=Montserrat:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400&family=Noto+Color+Emoji&family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Header Superior de Utilidades -->
+  <header class="newspaper-topbar">
+    <div class="topbar-container">
+      <div class="topbar-left">
+        <span class="edition-badge">📰 EDICIÓN DIGITAL</span>
+        <span class="topbar-date" id="currentDateStr">Cargando fecha...</span>
+      </div>
+
+      <div class="topbar-center">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" class="search-icon"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 14z"/></svg>
+          <input type="text" id="searchInput" placeholder="Buscar en los titulares de hoy...">
+          <button id="btnClearSearch" class="btn-clear-search" title="Limpiar búsqueda" style="display: none;">✕</button>
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        <!-- Widget Reloj de Bolsillo con Auto-Actualización 5 min -->
+        <div class="pocket-watch-container" id="autoRefreshWidget" title="Reloj de Auto-Actualización (5 min). Hacé clic para pausar o reanudar">
+          <div class="watch-crown-wrapper">
+            <div class="watch-ring"></div>
+            <div class="watch-stem"></div>
+          </div>
+          <div class="watch-case">
+            <svg class="watch-face" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="48" class="watch-bezel-outer" />
+              <circle cx="50" cy="50" r="44" class="watch-bezel-inner" />
+              <circle cx="50" cy="50" r="41" class="watch-dial-bg" />
+              <line x1="50" y1="11" x2="50" y2="16" class="watch-tick-mark tick-major" />
+              <line x1="89" y1="50" x2="84" y2="50" class="watch-tick-mark tick-major" />
+              <line x1="50" y1="89" x2="50" y2="84" class="watch-tick-mark tick-major" />
+              <line x1="11" y1="50" x2="16" y2="50" class="watch-tick-mark tick-major" />
+              <line x1="77" y1="23" x2="73.5" y2="26.5" class="watch-tick-mark tick-minor" />
+              <line x1="77" y1="77" x2="73.5" y2="73.5" class="watch-tick-mark tick-minor" />
+              <line x1="23" y1="77" x2="26.5" y2="73.5" class="watch-tick-mark tick-minor" />
+              <line x1="23" y1="23" x2="26.5" y2="26.5" class="watch-tick-mark tick-minor" />
+              <g id="watchHandGroup" class="watch-hand-group">
+                <line x1="50" y1="50" x2="50" y2="16" class="watch-hand-needle" />
+                <line x1="50" y1="50" x2="50" y2="58" class="watch-hand-counterweight" />
+                <circle cx="50" cy="50" r="3.5" class="watch-center-pivot" />
+              </g>
+            </svg>
+            <div class="watch-glass-shine"></div>
+          </div>
+          <div class="watch-digital-display">
+            <span class="watch-digital-time" id="refreshTimerCountdown">05:00</span>
+          </div>
+          <select class="watch-interval-select" id="watchIntervalSelect" title="Elegir intervalo de actualización">
+            <option value="1">1m</option>
+            <option value="2">2m</option>
+            <option value="3">3m</option>
+            <option value="5" selected>5m</option>
+            <option value="10">10m</option>
+            <option value="15">15m</option>
+            <option value="30">30m</option>
+            <option value="60">60m</option>
+          </select>
+          <button type="button" class="btn-watch-toggle" id="btnToggleAutoRefresh" title="Pausar / Reanudar">⏸️</button>
+        </div>
+
+        <button id="btnRefresh" class="topbar-btn" title="Actualizar noticias en vivo">
+          <svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+          <span>Actualizar</span>
+        </button>
+
+        <!-- Botón Configuración -->
+        <button id="btnOpenSettings" class="topbar-btn" title="Gestionar canales RSS, país y preferencias">
+          <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+          <span>Configuración</span>
+        </button>
+
+        <!-- Selector de 7 Estilos Editoriales -->
+        <div class="theme-dropdown-container">
+          <button id="btnThemeMenu" class="topbar-btn theme-menu-btn" title="Cambiar estilo y estética visual del diario">
+            <span class="theme-icon" id="themeIcon">🎨</span>
+            <span id="themeLabel">Modo Papel</span>
+            <svg class="caret-icon" viewBox="0 0 24 24" style="width: 10px; height: 10px; fill: currentColor;"><path d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="theme-dropdown-menu" id="themeDropdownMenu" style="display: none;">
+            <button type="button" class="theme-menu-item" data-theme="light">
+              <span class="theme-bullet" style="background: #fbfaf7; border: 1px solid #d4d0c5;"></span>
+              <div class="theme-menu-text">
+                <span class="theme-name">📰 Papel Prensa</span>
+                <span class="theme-sub">Broadsheet Clásico &bull; Playfair</span>
+              </div>
+            </button>
+            <button type="button" class="theme-menu-item" data-theme="dark">
+              <span class="theme-bullet" style="background: #0f172a;"></span>
+              <div class="theme-menu-text">
+                <span class="theme-name">🌙 Noche Editorial</span>
+                <span class="theme-sub">Revista Nocturna &bull; Merriweather</span>
+              </div>
+            </button>
+            <button type="button" class="theme-menu-item" data-theme="sepia">
+              <span class="theme-bullet" style="background: #fbf0d9; border: 1px solid #cbb898;"></span>
+              <div class="theme-menu-text">
+                <span class="theme-name">📜 Sepia Vintage</span>
+                <span class="theme-sub">Gaceta Columnar 1890 &bull; EB Garamond</span>
+              </div>
+            </button>
+            <button type="button" class="theme-menu-item" data-theme="financial">
+              <span class="theme-bullet" style="background: #fff1e5; border: 1px solid #d9b8a3;"></span>
+              <div class="theme-menu-text">
+                <span class="theme-name">📈 Financial Salmón</span>
+                <span class="theme-sub">Prensa Financiera &bull; Newsreader</span>
+              </div>
+            </button>
+            <button type="button" class="theme-menu-item" data-theme="nordic">
+              <span class="theme-bullet" style="background: #f8fafc; border: 1px solid #94a3b8;"></span>
+              <div class="theme-menu-text">
+                <span class="theme-name">❄️ Nórdico Minimal</span>
+                <span class="theme-sub">Revista Asimétrica &bull; Space Grotesk</span>
+              </div>
+            </button>
+            <button type="button" class="theme-menu-item" data-theme="cyberpunk">
+              <span class="theme-bullet" style="background: #050505; border: 1px solid #00ff66;"></span>
+              <div class="theme-menu-text">
+                <span class="theme-name">⚡ Terminal Cyberpunk</span>
+                <span class="theme-sub">HUD Táctico Matrix &bull; JetBrains</span>
+              </div>
+            </button>
+            <button type="button" class="theme-menu-item" data-theme="midnight">
+              <span class="theme-bullet" style="background: #090e1a; border: 1px solid #fbbf24;"></span>
+              <div class="theme-menu-text">
+                <span class="theme-name">✨ Midnight Elegance</span>
+                <span class="theme-sub">Magazine de Lujo &bull; Cormorant</span>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenido Principal del Periódico -->
+  <main class="newspaper-main">
+    <!-- Cabecera de Portada (Masthead) -->
+    <header class="newspaper-masthead">
+      <div class="masthead-meta-bar">
+        <span class="meta-item">EDICIÓN LATINOAMÉRICA &bull; INTERNACIONAL</span>
+        <span class="meta-item font-serif">PRENSA INDEPENDIENTE EN VIVO</span>
+        <span class="meta-item" id="mastheadFeedsCount">CARGANDO...</span>
+      </div>
+      <h1 class="newspaper-title">EL DIARIO</h1>
+      <p class="newspaper-tagline">Noticias seleccionadas de tus canales RSS preferidos en tiempo real</p>
+    </header>
+
+    <!-- Barra de Filtros por Categoría & Favoritos -->
+    <nav class="categories-nav">
+      <div class="categories-container" id="categoriesContainer">
+        <button type="button" class="cat-pill active" data-cat="all">Todas las Noticias</button>
+        <button type="button" class="cat-pill" data-cat="General">📰 Generales</button>
+        <button type="button" class="cat-pill" data-cat="Política">🏛️ Política</button>
+        <button type="button" class="cat-pill" data-cat="Economía">📈 Economía</button>
+        <button type="button" class="cat-pill" data-cat="Tecnología">💻 Tecnología</button>
+        <button type="button" class="cat-pill" data-cat="Deportes">⚽ Deportes</button>
+        <button type="button" class="cat-pill" data-cat="Cultura">🎬 Cultura</button>
+        <button type="button" class="cat-pill" data-cat="🔴 Reddit & Comunidades">🔴 Reddit</button>
+        <button type="button" class="cat-pill cat-pill-saved" data-cat="saved" id="catPillSaved">
+          ⭐ Favoritos <span class="saved-count-badge" id="savedCountBadge">0</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Estado de Carga (Skeleton) -->
+    <div id="loadingState" class="loading-state">
+      <div class="loading-spinner"></div>
+      <p class="loading-text">Cargando las últimas noticias de tus canales...</p>
+    </div>
+
+    <!-- Estado Vacío (Sin noticias) -->
+    <div id="emptyState" class="empty-state" style="display: none;">
+      <div class="empty-icon">📭</div>
+      <h3 id="emptyTitle">No hay noticias en esta sección</h3>
+      <p id="emptySubtitle">Probá seleccionando otra categoría, quitando el filtro de búsqueda o activando más canales en Configuración.</p>
+      <button type="button" id="btnResetFilters" class="btn-reset-filters">Ver todas las noticias</button>
+    </div>
+
+    <!-- Pliego Principal del Periódico (Layout Dinámico) -->
+    <div id="newspaperSheet" class="newspaper-sheet" style="display: none;">
+      <!-- Noticia Principal de Portada (Hero Lead) -->
+      <section id="heroSection" class="hero-story-section"></section>
+
+      <!-- Grilla Editorial de Noticias -->
+      <section id="gridSection" class="stories-grid"></section>
+    </div>
+  </main>
+
+  <!-- Paginación estilo Diario ("Hojas") -->
+  <footer class="newspaper-pagination-bar" id="paginationBar" style="display: none;">
+    <div class="pagination-container">
+      <button id="btnPrevPage" class="btn-nav-page" title="Página anterior (o flecha izquierda ←)">
+        <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+        <span>Hoja Anterior</span>
+      </button>
+
+      <div class="pagination-center">
+        <span class="page-indicator-text">Hoja <b id="currentPageNum">1</b> de <b id="totalPagesNum">1</b></span>
+        <div class="page-dots" id="pageDotsContainer"></div>
+      </div>
+
+      <button id="btnNextPage" class="btn-nav-page" title="Página siguiente (o flecha derecha →)">
+        <span>Hoja Siguiente</span>
+        <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+      </button>
+    </div>
+  </footer>
+
+  <!-- =========================================================================
+       PANEL LATERAL DESLIZABLE DE CONFIGURACIÓN (SETTINGS DRAWER)
+       ========================================================================= -->
+  <div id="settingsBackdrop" class="settings-backdrop"></div>
+  <aside id="settingsDrawer" class="settings-drawer" aria-hidden="true">
+    <div class="drawer-header">
+      <div class="drawer-title-group">
+        <img src="icons/icon48.png" style="width: 24px; height: 24px; border-radius: 5px;" alt="Logo BarRSS">
+        <h2>⚙️ Configuración de BarRSS</h2>
+      </div>
+      <button type="button" class="drawer-btn-close" id="btnCloseDrawer" title="Cerrar configuración">✕</button>
+    </div>
+
+    <!-- Pestañas de la Configuración -->
+    <nav class="drawer-tabs-nav">
+      <button type="button" class="drawer-tab-btn active" data-dtab="feeds">📡 Canales RSS</button>
+      <button type="button" class="drawer-tab-btn" data-dtab="add">➕ Agregar Canal</button>
+      <button type="button" class="drawer-tab-btn" data-dtab="preferences">⏱️ Preferencias</button>
+      <button type="button" class="drawer-tab-btn" data-dtab="backup">💾 Respaldo & OPML</button>
+      <button type="button" class="drawer-tab-btn" data-dtab="maintenance">🛠️ Mantenimiento</button>
+    </nav>
+
+    <div class="drawer-content">
+      <!-- 1. TAB CANALES RSS POR PAÍS -->
+      <section class="drawer-tab-pane active" id="pane-feeds">
+        <div class="drawer-section-heading">
+          <div>
+            <h3>🌍 Catálogo de Noticias por País</h3>
+            <p>Elegí tu país y activá los medios o subreddits que querés leer en tu Diario.</p>
+          </div>
+          <div class="drawer-feed-actions">
+            <button type="button" class="btn-mini" id="btnSelectAllDrawer">Activar todos</button>
+            <button type="button" class="btn-mini" id="btnDeselectAllDrawer">Desactivar</button>
+          </div>
+        </div>
+
+        <!-- Selector de Países con Banderas -->
+        <div class="country-pills-bar" id="drawerCountryPills"></div>
+
+        <!-- Buscador rápido dentro de canales -->
+        <div class="drawer-search-box">
+          <input type="text" id="drawerFeedSearch" placeholder="🔍 Filtrar canales o medios...">
+        </div>
+
+        <!-- Lista de Canales agrupados por categoría -->
+        <div class="drawer-feeds-list" id="drawerFeedsList"></div>
+      </section>
+
+      <!-- 2. TAB AGREGAR CANAL PROPIO / SUBREDDIT -->
+      <section class="drawer-tab-pane" id="pane-add">
+        <h3>➕ Agregar Canal RSS o Subreddit</h3>
+        <p class="drawer-desc">Podés añadir cualquier URL de RSS, Atom o escribir atajos de Reddit como <code>r/argentina</code> o <code>r/technology</code>.</p>
+        
+        <div class="drawer-form-group">
+          <label for="drawerCustomName">Nombre del Canal:</label>
+          <input type="text" id="drawerCustomName" placeholder="Ej: Mi Periódico o r/noticias">
+        </div>
+
+        <div class="drawer-form-group">
+          <label for="drawerCustomUrl">URL del Feed RSS o atajo de Reddit:</label>
+          <input type="text" id="drawerCustomUrl" placeholder="https://sitio.com/feed o r/subreddit">
+        </div>
+
+        <div class="drawer-form-group">
+          <label for="drawerCustomCategory">Categoría:</label>
+          <select id="drawerCustomCategory">
+            <option value="General">📰 General</option>
+            <option value="Política">🏛️ Política</option>
+            <option value="Economía">📈 Economía</option>
+            <option value="Tecnología">💻 Tecnología</option>
+            <option value="Deportes">⚽ Deportes</option>
+            <option value="Cultura">🎬 Cultura</option>
+            <option value="🔴 Reddit & Comunidades">🔴 Reddit & Comunidades</option>
+            <option value="Personalizados" selected>⭐ Canales Propios / Otros</option>
+          </select>
+        </div>
+
+        <button type="button" class="btn-primary-action" id="btnDrawerAddCustomFeed">
+          + Guardar Canal en BarRSS
+        </button>
+      </section>
+
+      <!-- 3. TAB PREFERENCIAS & PANEL LATERAL -->
+      <section class="drawer-tab-pane" id="pane-preferences">
+        <h3>⏱️ Preferencias y Herramientas</h3>
+
+        <div class="pref-card">
+          <div class="pref-info">
+            <strong>⏱️ Frecuencia de Auto-Actualización</strong>
+            <span>Cada cuánto tiempo se buscan noticias frescas en vivo.</span>
+          </div>
+          <select id="drawerRefreshInterval" class="pref-select">
+            <option value="1">1 minuto</option>
+            <option value="2">2 minutos</option>
+            <option value="3">3 minutos</option>
+            <option value="5">5 minutos</option>
+            <option value="10">10 minutos</option>
+            <option value="15">15 minutos</option>
+            <option value="30">30 minutos</option>
+            <option value="60">1 hora</option>
+          </select>
+        </div>
+
+        <div class="pref-card">
+          <div class="pref-info">
+            <strong>📑 Panel Lateral de Chrome</strong>
+            <span>Abrí el lector compacto al costado mientras navegás por la web.</span>
+          </div>
+          <button type="button" class="btn-secondary-action" id="btnDrawerOpenSidepanel">
+            Abrir Panel Lateral ➔
+          </button>
+        </div>
+
+        <div class="pref-card">
+          <div class="pref-info">
+            <strong>📡 Detector de RSS en Páginas Web</strong>
+            <span>Muestra el testigo discreto cuando una web visitada tiene RSS.</span>
+          </div>
+          <label class="drawer-switch">
+            <input type="checkbox" id="drawerRssDiscoveryToggle" checked>
+            <span class="drawer-slider"></span>
+          </label>
+        </div>
+
+        <div class="pref-card">
+          <div class="pref-info">
+            <strong>📻 Barra Flotante de Noticias (Marquesina Web)</strong>
+            <span>Cinta rotativa opcional al borde de las páginas web.</span>
+          </div>
+          <label class="drawer-switch">
+            <input type="checkbox" id="drawerFloatingBarToggle">
+            <span class="drawer-slider"></span>
+          </label>
+        </div>
+      </section>
+
+      <!-- 4. TAB RESPALDO & OPML -->
+      <section class="drawer-tab-pane" id="pane-backup">
+        <h3>💾 Copia de Seguridad & OPML</h3>
+        <p class="drawer-desc">Exportá tus canales para usarlos en cualquier lector RSS o respaldalos en tu cuenta de Chrome.</p>
+
+        <div class="backup-actions-grid">
+          <button type="button" class="btn-secondary-action" id="btnDrawerExportOpml">
+            📥 Exportar Canales a OPML (.xml)
+          </button>
+          <label class="btn-secondary-action file-btn-label">
+            📤 Importar Archivo OPML
+            <input type="file" id="drawerImportOpmlInput" accept=".opml,.xml" style="display: none;">
+          </label>
+        </div>
+      </section>
+
+      <!-- 5. TAB MANTENIMIENTO DEL SISTEMA -->
+      <section class="drawer-tab-pane" id="pane-maintenance">
+        <h3>🛠️ Mantenimiento y Utilidades</h3>
+        <p class="drawer-desc">Herramientas para diagnosticar, liberar espacio y reiniciar la configuración.</p>
+
+        <div class="maintenance-item">
+          <div class="pref-info">
+            <strong>🗑️ Borrado de Caché</strong>
+            <span>Limpia la memoria temporal de noticias y fuerza la recarga desde cero.</span>
+          </div>
+          <button type="button" class="btn-warning-action" id="btnDrawerClearCache">
+            Borrar Caché Ahora
+          </button>
+        </div>
+
+        <div class="maintenance-item">
+          <div class="pref-info">
+            <strong>🔄 Cambiar País o Reiniciar de Fábrica</strong>
+            <span>Vuelve a abrir el asistente de selección de país y restaura la configuración.</span>
+          </div>
+          <button type="button" class="btn-danger-action" id="btnDrawerResetFactory">
+            Reiniciar Extensión
+          </button>
+        </div>
+
+        <div class="maintenance-item">
+          <div class="pref-info">
+            <strong>📚 Tutorial Interactivo</strong>
+            <span>Repasar la guía de uso de El Diario, atajos y reloj.</span>
+          </div>
+          <button type="button" class="btn-secondary-action" id="btnDrawerLaunchTutorial">
+            Iniciar Tutorial 🚀
+          </button>
+        </div>
+      </section>
+    </div>
+  </aside>
+
+  <!-- =========================================================================
+       ASISTENTE DE PRIMER INICIO (ONBOARDING WIZARD MODAL)
+       ========================================================================= -->
+  <div id="onboardingModal" class="onboarding-modal-overlay" style="display: none;">
+    <div class="onboarding-card">
+      <div class="onboarding-header" style="display: flex; align-items: center; justify-content: space-between;">
+        <div>
+          <div class="brand-badge">
+            <img src="icons/icon48.png" style="width: 28px; height: 28px; border-radius: 6px;" alt="Logo">
+            <h2>¡Bienvenido a <span>BarRSS</span>!</h2>
+          </div>
+          <p class="onboarding-sub">Configurá tu periódico digital personalizado en 2 simples pasos.</p>
+        </div>
+        <button type="button" class="drawer-btn-close" id="btnCloseOnboarding" title="Cerrar e ir al Diario">✕</button>
+      </div>
+
+      <!-- PASO 1: SELECCIÓN DE PAÍS -->
+      <div class="onboarding-step" id="onboardingStep1">
+        <div class="step-indicator">PASO 1 DE 2 &bull; TU REGIÓN</div>
+        <h3>¿De qué país o región te gustaría recibir noticias?</h3>
+        <p class="step-desc">Activaremos automáticamente los principales diarios y medios de tu país.</p>
+        
+        <div class="country-grid" id="onboardingCountryGrid"></div>
+
+        <div class="onboarding-footer">
+          <button type="button" class="btn-primary-wizard" id="btnOnboardingNext1">
+            Continuar ➔
+          </button>
+        </div>
+      </div>
+
+      <!-- PASO 2: PÁGINA DE INICIO Y TUTORIAL -->
+      <div class="onboarding-step" id="onboardingStep2" style="display: none;">
+        <div class="step-indicator">PASO 2 DE 2 &bull; EXPERIENCIA</div>
+        <h3>¿Querés usar BarRSS como tu periódico de inicio?</h3>
+        
+        <div class="feature-choice-card">
+          <label class="choice-label">
+            <input type="checkbox" id="onboardingHomeOption" checked>
+            <div class="choice-text">
+              <strong>📰 Activar experiencia completa de noticias</strong>
+              <span>Mantiene tus noticias actualizadas automáticamente y listas cada vez que abrís Chrome.</span>
+            </div>
+          </label>
+        </div>
+
+        <div class="feature-choice-card" style="margin-top: 10px;">
+          <label class="choice-label">
+            <input type="checkbox" id="onboardingBarOption">
+            <div class="choice-text">
+              <strong>📻 Cinta de noticias web flotante (opcional)</strong>
+              <span>Muestra una marquesina de titulares al borde de tus pestañas.</span>
+            </div>
+          </label>
+        </div>
+
+        <div class="onboarding-footer onboarding-footer-split">
+          <button type="button" class="btn-secondary-wizard" id="btnOnboardingBack2">
+            ⬅ Volver
+          </button>
+          <div class="footer-actions-right">
+            <button type="button" class="btn-secondary-wizard" id="btnOnboardingSkip">
+              Ir directo al Diario 🗞️
+            </button>
+            <button type="button" class="btn-primary-wizard" id="btnOnboardingFinishTutorial">
+              Iniciar Tutorial 🚀
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast de Notificaciones (ej: "Enlace copiado", "Caché borrada") -->
+  <div id="toastNotification" class="toast-notification"></div>
+
+  <!-- Scripts -->
+  <script src="feeds_database.js"></script>
+  <script src="reader.js"></script>
+</body>
+</html>

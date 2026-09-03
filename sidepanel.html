@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BarRSS - Panel Lateral Nativo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #0b1329;
+      --bg-card: #162038;
+      --bg-input: #1e2c4d;
+      --border-color: #27385f;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #f97316;
+      --primary-hover: #ea580c;
+      --accent: #38bdf8;
+      --danger: #ef4444;
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, 'Noto Color Emoji', 'Apple Color Emoji', 'Segoe UI Emoji', sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-size: 13px;
+      line-height: 1.4;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Encabezado fijo */
+    .header {
+      padding: 12px 14px;
+      background-color: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-icon {
+      width: 26px;
+      height: 26px;
+      background: linear-gradient(135deg, var(--primary) 0%, #c2410c 100%);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .brand-icon svg {
+      width: 15px;
+      height: 15px;
+      fill: #ffffff;
+    }
+
+    .brand h1 {
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .brand span {
+      color: var(--primary);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-icon {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-icon:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--primary);
+      color: #ffffff;
+    }
+
+    .btn-icon-close:hover {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: var(--danger);
+      color: #ef4444;
+    }
+
+    .btn-icon svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+
+    /* Barra de herramientas / Búsqueda y selector de vista */
+    .toolbar {
+      padding: 10px 14px;
+      background-color: var(--bg-main);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .search-box {
+      position: relative;
+      width: 100%;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 7px 10px 7px 30px;
+      background-color: var(--bg-input);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      color: var(--text-main);
+      font-size: 12px;
+      outline: none;
+    }
+
+    .search-box input:focus {
+      border-color: var(--primary);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 9px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 13px;
+      height: 13px;
+      fill: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .toolbar-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .meta-info {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* Selector de Vista Lista / Ticker */
+    .view-toggle {
+      display: flex;
+      background-color: var(--bg-input);
+      border-radius: 7px;
+      padding: 3px;
+      border: 1px solid var(--border-color);
+      gap: 4px;
+    }
+
+    .view-btn {
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-muted);
+      border-radius: 5px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .view-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .view-btn.active {
+      background: linear-gradient(135deg, var(--primary) 0%, #ea580c 100%);
+      color: #ffffff;
+      border-color: rgba(249, 115, 22, 0.6);
+      box-shadow: 0 2px 6px rgba(249, 115, 22, 0.35);
+    }
+
+    /* ==========================================================================
+       WIDGET RELOJ DE BOLSILLO VINTAGE / STEAMPUNK CON MANECILLA ANIMADA
+       ========================================================================== */
+    .pocket-watch-container {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 2px 7px 2px 4px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1.5px solid #d97706;
+      border-radius: 18px;
+      cursor: pointer;
+      user-select: none;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .pocket-watch-container:hover {
+      transform: translateY(-1px);
+      border-color: #f59e0b;
+      box-shadow: 0 3px 10px rgba(245, 158, 11, 0.35);
+    }
+
+    .pocket-watch-container.paused {
+      opacity: 0.8;
+      border-style: dashed;
+      border-color: #64748b;
+      box-shadow: none;
+    }
+
+    /* Corona y Anilla del reloj */
+    .watch-crown-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-right: -4px;
+      z-index: 2;
+    }
+
+    .watch-ring {
+      width: 6px;
+      height: 6px;
+      border: 1.2px solid #f59e0b;
+      border-radius: 50%;
+      box-shadow: 0 0 3px rgba(245, 158, 11, 0.4);
+    }
+
+    .watch-stem {
+      width: 2.5px;
+      height: 2px;
+      background: #b45309;
+      margin-top: -1px;
+    }
+
+    /* Caja y Esfera */
+    .watch-case {
+      position: relative;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .watch-face {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
+    }
+
+    .watch-bezel-outer {
+      fill: none;
+      stroke: #92400e;
+      stroke-width: 4;
+    }
+
+    .watch-bezel-inner {
+      fill: none;
+      stroke: #f59e0b;
+      stroke-width: 2.5;
+    }
+
+    .watch-dial-bg {
+      fill: #090e1a;
+      stroke: #78350f;
+      stroke-width: 1;
+    }
+
+    /* Ticks del reloj */
+    .watch-tick-mark {
+      stroke-linecap: round;
+    }
+
+    .watch-tick-mark.tick-major {
+      stroke: #f59e0b;
+      stroke-width: 2.5;
+    }
+
+    .watch-tick-mark.tick-minor {
+      stroke: #92400e;
+      stroke-width: 1.5;
+    }
+
+    /* Manecilla animada que pasa */
+    .watch-hand-group {
+      transform-origin: 50px 50px;
+      animation: pocket-watch-sweep 60s linear infinite;
+    }
+
+    .pocket-watch-container.paused .watch-hand-group {
+      animation-play-state: paused !important;
+    }
+
+    @keyframes pocket-watch-sweep {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .watch-hand-needle {
+      stroke: #ef4444;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      filter: drop-shadow(0 0 2px rgba(239, 68, 68, 0.8));
+    }
+
+    .watch-hand-counterweight {
+      stroke: #ef4444;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+    }
+
+    .watch-center-pivot {
+      fill: #f59e0b;
+      stroke: #78350f;
+      stroke-width: 1;
+    }
+
+    /* Reflejo de cristal */
+    .watch-glass-shine {
+      position: absolute;
+      top: 1px;
+      left: 2px;
+      width: 22px;
+      height: 11px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 100%);
+      border-radius: 12px 12px 0 0;
+      pointer-events: none;
+      transform: rotate(-25deg);
+      opacity: 0.6;
+    }
+
+    /* Display Digital integrado */
+    .watch-digital-display {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      padding-left: 1px;
+    }
+
+    .watch-digital-time {
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      font-weight: 800;
+      font-size: 12px;
+      color: #f59e0b;
+      letter-spacing: 0.5px;
+      text-shadow: 0 0 6px rgba(245, 158, 11, 0.4);
+      line-height: 1;
+    }
+
+    .pocket-watch-container.paused .watch-digital-time {
+      color: var(--text-muted);
+      text-shadow: none;
+    }
+
+    /* Selector de minutos del reloj */
+    .watch-interval-select {
+      background: rgba(30, 41, 59, 0.9);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      color: #fbbf24;
+      border-radius: 4px;
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1px 3px;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.2s;
+      height: 18px;
+      margin-left: 2px;
+    }
+
+    .watch-interval-select:hover, .watch-interval-select:focus {
+      border-color: #f59e0b;
+      background: #1e293b;
+    }
+
+    /* Botón de pausa / reanudar */
+    .btn-watch-toggle {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      color: #f8fafc;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      margin-left: 2px;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .btn-watch-toggle:hover {
+      background: rgba(245, 158, 11, 0.25);
+      border-color: #f59e0b;
+      transform: scale(1.1);
+    }
+
+    /* Switch flotante barra web */
+    .floating-bar-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-card);
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      font-size: 11px;
+    }
+
+    .switch-mini {
+      position: relative;
+      display: inline-block;
+      width: 32px;
+      height: 18px;
+    }
+
+    .switch-mini input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider-mini {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #475569;
+      transition: .3s;
+      border-radius: 18px;
+    }
+
+    .slider-mini:before {
+      position: absolute;
+      content: "";
+      height: 12px;
+      width: 12px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider-mini {
+      background-color: var(--primary);
+    }
+
+    input:checked + .slider-mini:before {
+      transform: translateX(14px);
+    }
+
+    /* Contenedor principal de noticias */
+    .news-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .news-container::-webkit-scrollbar {
+      width: 6px;
+    }
+    .news-container::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 3px;
+    }
+
+    /* Tarjeta de noticia */
+    .news-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .news-card:hover {
+      transform: translateY(-1px);
+      border-color: rgba(249, 115, 22, 0.6);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .news-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .news-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #cbd5e1;
+    }
+
+    .news-favicon {
+      width: 13px;
+      height: 13px;
+      border-radius: 2px;
+      object-fit: contain;
+    }
+
+    .news-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.35;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .news-card:hover .news-title {
+      color: var(--accent);
+    }
+
+    /* Vista Ticker Vertical */
+    .ticker-vertical-viewport {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+      display: none;
+    }
+
+    .ticker-vertical-viewport.active {
+      display: block;
+    }
+
+    .ticker-vertical-track {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      animation: ticker-vertical-scroll 45s linear infinite;
+    }
+
+    .ticker-vertical-viewport:hover .ticker-vertical-track {
+      animation-play-state: paused;
+    }
+
+    @keyframes ticker-vertical-scroll {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-50%); }
+    }
+
+    /* Estado de carga y mensajes */
+    .status-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--text-muted);
+    }
+
+    .spinner {
+      width: 24px;
+      height: 24px;
+      border: 3px solid rgba(255, 255, 255, 0.15);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Encabezado -->
+  <div class="header">
+    <div class="brand">
+      <div class="brand-icon" style="background: none; padding: 0;">
+        <img src="icons/icon48.png" style="width: 26px; height: 26px; border-radius: 6px;" alt="BarRSS">
+      </div>
+      <h1>Bar<span>RSS</span></h1>
+    </div>
+
+    <div class="header-actions">
+      <!-- Widget Reloj de Bolsillo con Auto-Actualización 5 min -->
+      <div class="pocket-watch-container" id="autoRefreshWidget" title="Reloj de Auto-Actualización (5 min). Hacé clic para pausar o reanudar">
+        <div class="watch-crown-wrapper">
+          <div class="watch-ring"></div>
+          <div class="watch-stem"></div>
+        </div>
+        <div class="watch-case">
+          <svg class="watch-face" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="48" class="watch-bezel-outer" />
+            <circle cx="50" cy="50" r="44" class="watch-bezel-inner" />
+            <circle cx="50" cy="50" r="41" class="watch-dial-bg" />
+            <line x1="50" y1="11" x2="50" y2="16" class="watch-tick-mark tick-major" />
+            <line x1="89" y1="50" x2="84" y2="50" class="watch-tick-mark tick-major" />
+            <line x1="50" y1="89" x2="50" y2="84" class="watch-tick-mark tick-major" />
+            <line x1="11" y1="50" x2="16" y2="50" class="watch-tick-mark tick-major" />
+            <line x1="77" y1="23" x2="73.5" y2="26.5" class="watch-tick-mark tick-minor" />
+            <line x1="77" y1="77" x2="73.5" y2="73.5" class="watch-tick-mark tick-minor" />
+            <line x1="23" y1="77" x2="26.5" y2="73.5" class="watch-tick-mark tick-minor" />
+            <line x1="23" y1="23" x2="26.5" y2="26.5" class="watch-tick-mark tick-minor" />
+            <g id="watchHandGroup" class="watch-hand-group">
+              <line x1="50" y1="50" x2="50" y2="16" class="watch-hand-needle" />
+              <line x1="50" y1="50" x2="50" y2="58" class="watch-hand-counterweight" />
+              <circle cx="50" cy="50" r="3.5" class="watch-center-pivot" />
+            </g>
+          </svg>
+          <div class="watch-glass-shine"></div>
+        </div>
+        <div class="watch-digital-display">
+          <span class="watch-digital-time" id="refreshTimerCountdown">05:00</span>
+        </div>
+        <select class="watch-interval-select" id="watchIntervalSelect" title="Elegir intervalo de actualización">
+          <option value="1">1m</option>
+          <option value="2">2m</option>
+          <option value="3">3m</option>
+          <option value="5" selected>5m</option>
+          <option value="10">10m</option>
+          <option value="15">15m</option>
+          <option value="30">30m</option>
+          <option value="60">60m</option>
+        </select>
+        <button type="button" class="btn-watch-toggle" id="btnToggleAutoRefresh" title="Pausar / Reanudar">⏸️</button>
+      </div>
+
+      <button class="btn-icon" id="btnOpenReader" title="Abrir El Diario BarRSS (Edición Completa)">
+        <svg viewBox="0 0 24 24">
+          <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+        </svg>
+      </button>
+      <button class="btn-icon" id="btnRefresh" title="Actualizar titulares ahora">
+        <svg viewBox="0 0 24 24">
+          <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+        </svg>
+      </button>
+      <button class="btn-icon btn-icon-close" id="btnCloseSidepanel" title="Cerrar panel lateral">
+        <svg viewBox="0 0 24 24">
+          <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Barra de herramientas -->
+  <div class="toolbar">
+    <!-- Switch rápido de la barra flotante sobre páginas -->
+    <div class="floating-bar-toggle">
+      <span>Barra flotante sobre las webs:</span>
+      <label class="switch-mini" title="Activar / Desactivar la barra flotante opcional">
+        <input type="checkbox" id="webBarEnabled">
+        <span class="slider-mini"></span>
+      </label>
+    </div>
+
+    <!-- Buscador -->
+    <div class="search-box">
+      <svg class="search-icon" viewBox="0 0 24 24">
+        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+      </svg>
+      <input type="text" id="searchInput" placeholder="Filtrar titulares por palabra clave...">
+    </div>
+
+    <!-- Filtros de vista -->
+    <div class="toolbar-row">
+      <span class="meta-info" id="metaInfoText">Cargando canales...</span>
+      <div class="view-toggle">
+        <button class="view-btn active" id="btnViewList" data-view="list">
+          <span>📜 Lista</span>
+        </button>
+        <button class="view-btn" id="btnViewTicker" data-view="ticker">
+          <span>🎠 Ticker</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- VISTA 1: Lista de noticias con scroll -->
+  <div class="news-container" id="newsListContainer">
+    <div class="status-box">
+      <div class="spinner"></div>
+      <p>Cargando noticias de tus canales RSS...</p>
+    </div>
+  </div>
+
+  <!-- VISTA 2: Ticker vertical continuo -->
+  <div class="ticker-vertical-viewport" id="newsTickerContainer">
+    <div class="ticker-vertical-track" id="tickerVerticalTrack"></div>
+  </div>
+
+  <script src="feeds_database.js"></script>
+  <script src="sidepanel.js"></script>
+</body>
+</html>
