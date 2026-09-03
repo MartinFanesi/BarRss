@@ -100,7 +100,7 @@ var COUNTRY_CATALOG = {
           "country": "Argentina",
           "countryFlag": "🇦🇷",
           "lang": "es",
-          "url": "https://www.infobae.com/feeds/rss/",
+          "url": "https://www.infobae.com/arc/outboundfeeds/rss/",
           "domain": "infobae.com",
           "enabled": true,
           "isCustom": false
@@ -2522,7 +2522,7 @@ var ALL_PRESET_FEEDS = [
     "country": "Argentina",
     "countryFlag": "🇦🇷",
     "lang": "es",
-    "url": "https://www.infobae.com/feeds/rss/",
+    "url": "https://www.infobae.com/arc/outboundfeeds/rss/",
     "domain": "infobae.com",
     "enabled": true,
     "isCustom": false

@@ -347,14 +347,20 @@ function normalizeArticleTitle(title) {
 function getCanonicalFeedUrl(rawUrl) {
   if (!rawUrl) return '';
   let u = rawUrl.trim();
-  if (u.includes('lanacion.com.ar/rss/ultimas-noticias') || u.includes('lanacion.com.ar/rss/politica') || u.includes('lanacion.com.ar/rss/economia')) {
+  if (u.includes('infobae.com')) {
+    return 'https://www.infobae.com/arc/outboundfeeds/rss/';
+  }
+  if (u.includes('lanacion.com.ar')) {
     return 'https://www.lanacion.com.ar/arc/outboundfeeds/rss/';
   }
-  if (u.includes('clarin.com/rss/ultimomomento')) {
+  if (u.includes('clarin.com/rss/ultimomomento') || u.includes('clarin.com/rss/lo-ultimo')) {
     return 'https://www.clarin.com/rss/lo-ultimo/';
   }
-  if (u.includes('pagina12.com.ar/rss/portada.xml') || u.includes('pagina12.com.ar/rss/')) {
-    return 'https://www.perfil.com/feed';
+  if (u.includes('pagina12.com.ar')) {
+    return 'https://www.pagina12.com.ar/rss/portada';
+  }
+  if (u.includes('ambito.com')) {
+    return 'https://www.ambito.com/rss/pages/home.xml';
   }
   return u;
 }
@@ -414,7 +420,7 @@ async function fetchSingleFeedData(feed, forceRefresh) {
       description: item.description || '',
       imageUrl: item.imageUrl || '',
       pubDate: item.pubDate || '',
-      category: feed.category || 'General',
+      category: item.category || feed.category || 'General',
       feedId: feed.id,
       feedName: feed.name || domain || 'Noticias',
       domain: domain,
@@ -542,13 +548,21 @@ function parseFeedXml(xml) {
       pubDate = cleanXmlText(dateMatch[1]);
     }
 
+    // Categoría del artículo
+    let category = '';
+    const catMatch = block.match(/<category[^>]*>([\s\S]*?)<\/category>/i);
+    if (catMatch) {
+      category = cleanXmlText(catMatch[1]);
+    }
+
     if (title && link) {
       results.push({
         title,
         link,
         description,
         imageUrl,
-        pubDate
+        pubDate,
+        category
       });
     }
 

@@ -256,6 +256,14 @@
     </div>
   </footer>
 
+  <!-- Flechas Flotantes Laterales de Navegación Rápida -->
+  <button type="button" id="floatingPrevPage" class="floating-page-arrow left" title="Hoja anterior (◀ o Flecha Izquierda)" aria-label="Hoja anterior">
+    <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+  </button>
+  <button type="button" id="floatingNextPage" class="floating-page-arrow right" title="Hoja siguiente (▶ o Flecha Derecha)" aria-label="Hoja siguiente">
+    <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+  </button>
+
   <!-- Mini Instructivo Flotante de Atajos de Teclado -->
   <aside id="keyboardNavHint" class="keyboard-nav-hint" role="status" aria-live="polite">
     <div class="hint-icon-glow">🗞️</div>
@@ -263,11 +271,11 @@
       <div class="hint-title-row">
         <strong>Hojear Páginas</strong>
         <div class="hint-keys">
-          <kbd class="key-kbd" id="kbdLeft">◀</kbd>
-          <kbd class="key-kbd" id="kbdRight">▶</kbd>
+          <button type="button" class="key-kbd btn-kbd" id="kbdLeft" title="Ir a hoja anterior">◀</button>
+          <button type="button" class="key-kbd btn-kbd" id="kbdRight" title="Ir a hoja siguiente">▶</button>
         </div>
       </div>
-      <p class="hint-desc">Utilizá las flechas del teclado para desplazarte por páginas</p>
+      <p class="hint-desc">Utilizá las flechas del teclado o hacé clic para hojear</p>
     </div>
     <button type="button" class="hint-close" id="btnCloseKeyboardHint" title="Cerrar aviso">✕</button>
   </aside>

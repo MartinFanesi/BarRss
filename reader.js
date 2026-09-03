@@ -106,6 +106,8 @@ const elements = {
   paginationBar: document.getElementById('paginationBar'),
   btnPrevPage: document.getElementById('btnPrevPage'),
   btnNextPage: document.getElementById('btnNextPage'),
+  floatingPrevPage: document.getElementById('floatingPrevPage'),
+  floatingNextPage: document.getElementById('floatingNextPage'),
   currentPageNum: document.getElementById('currentPageNum'),
   totalPagesNum: document.getElementById('totalPagesNum'),
   pageDotsContainer: document.getElementById('pageDotsContainer'),
@@ -608,7 +610,7 @@ function setupEventListeners() {
     applyFiltersAndRender();
   });
 
-  // Paginación
+  // Paginación: Botones inferiores
   elements.btnPrevPage?.addEventListener('click', () => {
     if (currentPage > 1) {
       changePage(currentPage - 1);
@@ -616,7 +618,21 @@ function setupEventListeners() {
   });
 
   elements.btnNextPage?.addEventListener('click', () => {
-    const totalPages = Math.ceil(filteredStories.length / ITEMS_PER_PAGE);
+    const totalPages = Math.ceil(filteredStories.length / ITEMS_PER_PAGE) || 1;
+    if (currentPage < totalPages) {
+      changePage(currentPage + 1);
+    }
+  });
+
+  // Paginación: Flechas flotantes laterales
+  elements.floatingPrevPage?.addEventListener('click', () => {
+    if (currentPage > 1) {
+      changePage(currentPage - 1);
+    }
+  });
+
+  elements.floatingNextPage?.addEventListener('click', () => {
+    const totalPages = Math.ceil(filteredStories.length / ITEMS_PER_PAGE) || 1;
     if (currentPage < totalPages) {
       changePage(currentPage + 1);
     }
@@ -627,6 +643,24 @@ function setupEventListeners() {
   const btnCloseKeyboardHint = document.getElementById('btnCloseKeyboardHint');
   const kbdLeft = document.getElementById('kbdLeft');
   const kbdRight = document.getElementById('kbdRight');
+
+  // Permitir hojear haciendo clic en las teclas del mini instructivo
+  kbdLeft?.addEventListener('click', () => {
+    if (currentPage > 1) {
+      kbdLeft.classList.add('active-press');
+      setTimeout(() => kbdLeft.classList.remove('active-press'), 180);
+      changePage(currentPage - 1);
+    }
+  });
+
+  kbdRight?.addEventListener('click', () => {
+    const totalPages = Math.ceil(filteredStories.length / ITEMS_PER_PAGE) || 1;
+    if (currentPage < totalPages) {
+      kbdRight.classList.add('active-press');
+      setTimeout(() => kbdRight.classList.remove('active-press'), 180);
+      changePage(currentPage + 1);
+    }
+  });
 
   if (keyboardHint) {
     // Mostrar a los 1.5s de abrir el diario
@@ -648,17 +682,29 @@ function setupEventListeners() {
     }
   }
 
+  // Garantizar que la ventana tenga el foco para responder a las teclas inmediatamente
+  try {
+    window.focus();
+    document.body.setAttribute('tabindex', '-1');
+    document.body.focus();
+  } catch {}
+
   // Atajos de teclado: Flechas para pasar de hoja
   window.addEventListener('keydown', (e) => {
-    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-    if (e.key === 'ArrowLeft' && currentPage > 1) {
-      if (kbdLeft) {
-        kbdLeft.classList.add('active-press');
-        setTimeout(() => kbdLeft.classList.remove('active-press'), 180);
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
+
+    if (e.key === 'ArrowLeft' || e.key === 'Left' || e.key === 'PageUp') {
+      e.preventDefault();
+      if (currentPage > 1) {
+        if (kbdLeft) {
+          kbdLeft.classList.add('active-press');
+          setTimeout(() => kbdLeft.classList.remove('active-press'), 180);
+        }
+        changePage(currentPage - 1);
       }
-      changePage(currentPage - 1);
-    } else if (e.key === 'ArrowRight') {
-      const totalPages = Math.ceil(filteredStories.length / ITEMS_PER_PAGE);
+    } else if (e.key === 'ArrowRight' || e.key === 'Right' || e.key === 'PageDown') {
+      e.preventDefault();
+      const totalPages = Math.ceil(filteredStories.length / ITEMS_PER_PAGE) || 1;
       if (currentPage < totalPages) {
         if (kbdRight) {
           kbdRight.classList.add('active-press');
@@ -1015,6 +1061,16 @@ function attachShareEventListeners(container) {
    9. CONTROLES DE PAGINACIÓN ("HOJAS")
    ========================================================================== */
 function renderPaginationControls(totalPages) {
+  // Actualizar flechas flotantes laterales
+  if (elements.floatingPrevPage) {
+    elements.floatingPrevPage.disabled = currentPage <= 1;
+    elements.floatingPrevPage.style.display = totalPages > 1 ? 'flex' : 'none';
+  }
+  if (elements.floatingNextPage) {
+    elements.floatingNextPage.disabled = currentPage >= totalPages;
+    elements.floatingNextPage.style.display = totalPages > 1 ? 'flex' : 'none';
+  }
+
   if (totalPages <= 1) {
     elements.paginationBar.style.display = 'none';
     return;
