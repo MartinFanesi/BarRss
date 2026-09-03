@@ -581,14 +581,48 @@ function setupEventListeners() {
     }
   });
 
+  // Mini Instructivo Flotante de Teclado
+  const keyboardHint = document.getElementById('keyboardNavHint');
+  const btnCloseKeyboardHint = document.getElementById('btnCloseKeyboardHint');
+  const kbdLeft = document.getElementById('kbdLeft');
+  const kbdRight = document.getElementById('kbdRight');
+
+  if (keyboardHint) {
+    // Mostrar a los 1.5s de abrir el diario
+    const hintTimer = setTimeout(() => {
+      keyboardHint.classList.add('visible');
+    }, 1500);
+
+    // Auto-ocultar a los 9.5s
+    const autoHideTimer = setTimeout(() => {
+      keyboardHint.classList.remove('visible');
+    }, 9500);
+
+    if (btnCloseKeyboardHint) {
+      btnCloseKeyboardHint.addEventListener('click', () => {
+        clearTimeout(hintTimer);
+        clearTimeout(autoHideTimer);
+        keyboardHint.classList.remove('visible');
+      });
+    }
+  }
+
   // Atajos de teclado: Flechas para pasar de hoja
   window.addEventListener('keydown', (e) => {
-    if (e.target.tagName === 'INPUT') return;
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
     if (e.key === 'ArrowLeft' && currentPage > 1) {
+      if (kbdLeft) {
+        kbdLeft.classList.add('active-press');
+        setTimeout(() => kbdLeft.classList.remove('active-press'), 180);
+      }
       changePage(currentPage - 1);
     } else if (e.key === 'ArrowRight') {
       const totalPages = Math.ceil(filteredStories.length / ITEMS_PER_PAGE);
       if (currentPage < totalPages) {
+        if (kbdRight) {
+          kbdRight.classList.add('active-press');
+          setTimeout(() => kbdRight.classList.remove('active-press'), 180);
+        }
         changePage(currentPage + 1);
       }
     }
