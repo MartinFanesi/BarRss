@@ -63,7 +63,7 @@ BarRss/
    chrome://extensions/
    ```
 2. Activá el interruptor **"Modo de desarrollador"** (esquina superior derecha).
-3. Hacé clic en **"Cargar descomprimida"** (*Load unpacked*) y seleccioná `/home/cko09/BarRss`.
+3. Hacé clic en **"Cargar descomprimida"** (*Load unpacked*) y seleccioná la carpeta del proyecto (`BarRss`).
    *(Si ya la tenías cargada, simplemente hacé clic en el botón de **Actualizar (Reload)** 🔄 en la tarjeta de BarRSS).*
 4. Para abrir el **Panel Lateral Nativo**, hacé clic en el ícono de la extensión en la barra de herramientas y presioná:  
    **"🖥️ Abrir en Panel Lateral Nativo de Chrome"**.
