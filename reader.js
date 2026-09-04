@@ -553,7 +553,8 @@ function setupEventListeners() {
   });
 
   elements.btnDrawerOpenSidepanel?.addEventListener('click', () => {
-    chrome.runtime.sendMessage({ action: 'OPEN_MENU' });
+    chrome.runtime.sendMessage({ action: 'OPEN_SIDEPANEL' });
+    showToast('📑 Abriendo Panel Lateral en Chrome...');
   });
 
   elements.drawerRssDiscoveryToggle?.addEventListener('change', async (e) => {

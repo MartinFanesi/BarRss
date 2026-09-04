@@ -958,13 +958,7 @@ function setupEventListeners() {
   if (elements.btnOpenSidePanel) {
     elements.btnOpenSidePanel.addEventListener('click', async () => {
       try {
-        const currentWindow = await chrome.windows.getCurrent();
-        if (chrome.sidePanel && chrome.sidePanel.open) {
-          await chrome.sidePanel.open({ windowId: currentWindow.id });
-          window.close();
-        } else {
-          alert('Tu versión de Chrome no soporta la API Side Panel. Requiere Chrome 114 o superior.');
-        }
+        await chrome.runtime.sendMessage({ action: 'OPEN_SIDEPANEL' });
       } catch (err) {
         console.warn('[BarRSS] Error abriendo Panel Lateral:', err);
       }

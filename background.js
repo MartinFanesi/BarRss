@@ -85,21 +85,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return true;
   }
 
-  if (request.action === 'OPEN_MENU') {
-    if (chrome.sidePanel && chrome.sidePanel.open && sender.tab) {
-      chrome.sidePanel.open({ tabId: sender.tab.id })
-        .then(() => sendResponse({ success: true }))
-        .catch(err => {
-          console.warn('[BarRSS] Error abriendo sidePanel desde background:', err);
-          chrome.tabs.create({ url: chrome.runtime.getURL('popup.html') });
-          sendResponse({ success: true, fallback: true });
-        });
-      return true;
-    } else {
-      chrome.tabs.create({ url: chrome.runtime.getURL('popup.html') });
-      sendResponse({ success: true, fallback: true });
-      return false;
-    }
+  if (request.action === 'OPEN_MENU' || request.action === 'OPEN_SIDEPANEL') {
+    openSidePanelSafely()
+      .then(() => sendResponse({ success: true }))
+      .catch(err => {
+        console.warn('[BarRSS] Error abriendo sidePanel:', err);
+        sendResponse({ success: false, error: err.message });
+      });
+    return true;
   }
 
   if (request.action === 'OPEN_READER') {
@@ -198,6 +191,44 @@ function openSettingsWindow() {
   });
 }
 
+async function openSidePanelSafely() {
+  try {
+    // 1. Buscar ventanas de tipo 'normal' (el navegador principal con pestañas)
+    const normalWindows = await chrome.windows.getAll({ windowTypes: ['normal'] });
+    let targetWindow = normalWindows.find(w => w.focused) || normalWindows[0];
+
+    if (!targetWindow) {
+      // Si el usuario no tiene ninguna ventana normal abierta, crear una pestaña normal
+      const newWin = await chrome.windows.create({
+        url: 'chrome://newtab',
+        type: 'normal',
+        focused: true
+      });
+      if (chrome.sidePanel && chrome.sidePanel.open) {
+        setTimeout(() => {
+          chrome.sidePanel.open({ windowId: newWin.id }).catch(() => {});
+        }, 300);
+      }
+      return;
+    }
+
+    // 2. Enfocar la ventana del navegador normal
+    await chrome.windows.update(targetWindow.id, { focused: true });
+
+    // 3. Abrir el Side Panel en esa ventana normal de forma segura
+    if (chrome.sidePanel && chrome.sidePanel.open) {
+      await chrome.sidePanel.open({ windowId: targetWindow.id });
+    } else {
+      await chrome.tabs.create({ url: chrome.runtime.getURL('sidepanel.html'), windowId: targetWindow.id });
+    }
+  } catch (err) {
+    console.warn('[BarRSS] Error abriendo Side Panel de forma segura:', err);
+    try {
+      await chrome.tabs.create({ url: chrome.runtime.getURL('sidepanel.html') });
+    } catch {}
+  }
+}
+
 function setupContextMenus() {
   if (!chrome.contextMenus) return;
   chrome.contextMenus.removeAll(() => {
@@ -237,13 +268,7 @@ chrome.contextMenus?.onClicked.addListener(async (info, tab) => {
   if (info.menuItemId === 'barrss_open_reader') {
     await openReaderApp();
   } else if (info.menuItemId === 'barrss_open_sidepanel') {
-    if (chrome.sidePanel && chrome.sidePanel.open && tab?.windowId) {
-      chrome.sidePanel.open({ windowId: tab.windowId }).catch(() => {
-        chrome.tabs.create({ url: chrome.runtime.getURL('sidepanel.html') });
-      });
-    } else {
-      chrome.tabs.create({ url: chrome.runtime.getURL('sidepanel.html') });
-    }
+    await openSidePanelSafely();
   } else if (info.menuItemId === 'barrss_open_settings') {
     openSettingsWindow();
   }
