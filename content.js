@@ -25,229 +25,7 @@
     return;
   }
 
-  const DEFAULT_FEEDS = [
-    // 🇦🇷 Noticias Generales
-    {
-      id: 'arg_infobae',
-      name: 'Infobae',
-      category: 'Noticias Generales',
-      lang: 'es',
-      url: 'https://www.infobae.com/arc/outboundfeeds/rss/',
-      domain: 'infobae.com',
-      enabled: true,
-      isCustom: false
-    },
-    {
-      id: 'arg_clarin',
-      name: 'Clarín',
-      category: 'Noticias Generales',
-      lang: 'es',
-      url: 'https://www.clarin.com/rss/lo-ultimo/',
-      domain: 'clarin.com',
-      enabled: true,
-      isCustom: false
-    },
-    {
-      id: 'arg_lanacion',
-      name: 'La Nación',
-      category: 'Noticias Generales',
-      lang: 'es',
-      url: 'https://www.lanacion.com.ar/arc/outboundfeeds/rss/',
-      domain: 'lanacion.com.ar',
-      enabled: false,
-      isCustom: false
-    },
-    {
-      id: 'arg_perfil',
-      name: 'Perfil',
-      category: 'Noticias Generales',
-      lang: 'es',
-      url: 'https://www.perfil.com/feed',
-      domain: 'perfil.com',
-      enabled: false,
-      isCustom: false
-    },
-
-    // 📈 Economía y Finanzas
-    {
-      id: 'eco_cronista',
-      name: 'El Cronista',
-      category: 'Economía y Finanzas',
-      lang: 'es',
-      url: 'https://www.cronista.com/arc/outboundfeeds/news/',
-      domain: 'cronista.com',
-      enabled: true,
-      isCustom: false
-    },
-    {
-      id: 'eco_ambito',
-      name: 'Ámbito Financiero',
-      category: 'Economía y Finanzas',
-      lang: 'es',
-      url: 'https://www.ambito.com/rss/pages/home.xml',
-      domain: 'ambito.com',
-      enabled: false,
-      isCustom: false
-    },
-    {
-      id: 'eco_iprofesional',
-      name: 'iProfesional',
-      category: 'Economía y Finanzas',
-      lang: 'es',
-      url: 'https://www.iprofesional.com/rss/home',
-      domain: 'iprofesional.com',
-      enabled: false,
-      isCustom: false
-    },
-
-    // 💻 Tecnología
-    {
-      id: 'tec_xataka',
-      name: 'Xataka',
-      category: 'Tecnología',
-      lang: 'es',
-      url: 'https://www.xataka.com/feedburner.xml',
-      domain: 'xataka.com',
-      enabled: true,
-      isCustom: false
-    },
-    {
-      id: 'tec_genbeta',
-      name: 'Genbeta',
-      category: 'Tecnología',
-      lang: 'es',
-      url: 'https://feeds.weblogssl.com/genbeta',
-      domain: 'genbeta.com',
-      enabled: false,
-      isCustom: false
-    },
-    {
-      id: 'tec_hipertextual',
-      name: 'Hipertextual',
-      category: 'Tecnología',
-      lang: 'es',
-      url: 'https://hipertextual.com/feed',
-      domain: 'hipertextual.com',
-      enabled: false,
-      isCustom: false
-    },
-    {
-      id: 'tec_muycomputer',
-      name: 'MuyComputer',
-      category: 'Tecnología',
-      lang: 'es',
-      url: 'https://www.muycomputer.com/feed/',
-      domain: 'muycomputer.com',
-      enabled: false,
-      isCustom: false
-    },
-
-    // ⚽ Deportes
-    {
-      id: 'dep_ole',
-      name: 'Diario Olé',
-      category: 'Deportes',
-      lang: 'es',
-      url: 'https://www.ole.com.ar/rss/lo-ultimo/',
-      domain: 'ole.com.ar',
-      enabled: false,
-      isCustom: false
-    },
-    {
-      id: 'dep_tyc',
-      name: 'TyC Sports',
-      category: 'Deportes',
-      lang: 'es',
-      url: 'https://www.tycsports.com/rss/lo-ultimo.xml',
-      domain: 'tycsports.com',
-      enabled: false,
-      isCustom: false
-    },
-    {
-      id: 'dep_espn',
-      name: 'ESPN Deportes',
-      category: 'Deportes',
-      lang: 'es',
-      url: 'https://www.espn.com.ar/espn/rss/news',
-      domain: 'espn.com.ar',
-      enabled: false,
-      isCustom: false
-    },
-    {
-      id: 'dep_marca',
-      name: 'Marca',
-      category: 'Deportes',
-      lang: 'es',
-      url: 'https://e00-marca.uecdn.es/rss/portada.xml',
-      domain: 'marca.com',
-      enabled: false,
-      isCustom: false
-    },
-
-    // 🌍 Internacionales
-    {
-      id: 'int_bbc',
-      name: 'BBC Mundo',
-      category: 'Internacionales',
-      lang: 'es',
-      url: 'https://feeds.bbci.co.uk/mundo/rss.xml',
-      domain: 'bbc.com',
-      enabled: false,
-      isCustom: false
-    },
-    {
-      id: 'int_elpais',
-      name: 'El País',
-      category: 'Internacionales',
-      lang: 'es',
-      url: 'https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/portada',
-      domain: 'elpais.com',
-      enabled: false,
-      isCustom: false
-    },
-    {
-      id: 'int_dw',
-      name: 'DW Español',
-      category: 'Internacionales',
-      lang: 'es',
-      url: 'https://rss.dw.com/rdf/rss-sp-all',
-      domain: 'dw.com',
-      enabled: false,
-      isCustom: false
-    },
-    {
-      id: 'int_cnn',
-      name: 'CNN en Español',
-      category: 'Internacionales',
-      lang: 'es',
-      url: 'https://cnnespanol.cnn.com/feed/',
-      domain: 'cnnespanol.cnn.com',
-      enabled: false,
-      isCustom: false
-    },
-
-    // 🎬 Cultura y Espectáculos
-    {
-      id: 'cul_teleshow',
-      name: 'Infobae Teleshow',
-      category: 'Cultura y Espectáculos',
-      lang: 'es',
-      url: 'https://www.infobae.com/arc/outboundfeeds/rss/?outputType=xml&subCategory=teleshow',
-      domain: 'infobae.com',
-      enabled: false,
-      isCustom: false
-    },
-    {
-      id: 'cul_rollingstone',
-      name: 'Rolling Stone en Español',
-      category: 'Cultura y Espectáculos',
-      lang: 'es',
-      url: 'https://es.rollingstone.com/feed/',
-      domain: 'rollingstone.com',
-      enabled: false,
-      isCustom: false
-    }
-  ];
+  const DEFAULT_FEEDS = getDefaultFeedsForCountry('Argentina');
 
   const DEFAULT_SETTINGS = {
     enabled: false,
@@ -624,10 +402,10 @@
 
   async function init() {
     try {
-      const saved = await chrome.storage.sync.get(DEFAULT_SETTINGS);
+      const saved = await BarRSSSettings.get(DEFAULT_SETTINGS);
       currentSettings = { ...DEFAULT_SETTINGS, ...saved };
 
-      if (!Array.isArray(currentSettings.feeds) || currentSettings.feeds.length === 0) {
+      if (!Array.isArray(currentSettings.feeds)) {
         currentSettings.feeds = DEFAULT_FEEDS;
       }
 
@@ -666,6 +444,12 @@
     hostElement.className = `barrss-pos-${currentSettings.position} ${modeClass}`.trim();
 
     shadowRoot = hostElement.attachShadow({ mode: 'open' });
+    shadowRoot.addEventListener('error', event => {
+      if (event.target.tagName !== 'IMG') return;
+      event.target.hidden = true;
+      const fallback = event.target.nextElementSibling;
+      if (fallback?.classList.contains('barrss-rss-fallback')) fallback.style.display = 'inline-flex';
+    }, true);
 
     const styleTag = document.createElement('style');
     styleTag.id = 'barrss-dynamic-styles';
@@ -915,7 +699,7 @@
 
     // Actualizar configuración global
     try {
-      await chrome.storage.sync.set({ enabled: false });
+      await BarRSSSettings.set({ enabled: false });
       showUndoToast();
     } catch (err) {
       console.warn('[BarRSS] Error al guardar estado desactivado:', err);
@@ -964,7 +748,7 @@
     if (undoBtn) {
       undoBtn.addEventListener('click', async () => {
         toast.remove();
-        await chrome.storage.sync.set({ enabled: true });
+        await BarRSSSettings.set({ enabled: true });
         init();
       });
     }
@@ -1055,7 +839,6 @@
               class="barrss-favicon" 
               alt=""
               loading="lazy"
-              onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='inline-flex';"
             />
           ` : ''}
           <span class="barrss-rss-fallback" style="${item.faviconUrl ? 'display: none;' : 'display: inline-flex;'}">
@@ -1115,7 +898,7 @@
     }
 
     updatePageOffset(true);
-    await chrome.storage.sync.set({ position: newPos });
+    await BarRSSSettings.set({ position: newPos });
   }
 
   function setupScrollListener() {
@@ -1332,7 +1115,7 @@
         currentSettings.feeds = [];
       }
       currentSettings.feeds.push(newFeed);
-      await chrome.storage.sync.set({ feeds: currentSettings.feeds });
+      await BarRSSSettings.set({ feeds: currentSettings.feeds });
 
       const body = card.querySelector('.barrss-toast-body');
       if (body) body.innerHTML = '✅ <strong>¡Canal agregado con éxito a BarRSS!</strong>';
@@ -1357,7 +1140,7 @@
     // Botón Desactivar avisos
     card.querySelector('#barrss-toast-btn-mute')?.addEventListener('click', async () => {
       currentSettings.rssDiscoveryEnabled = false;
-      await chrome.storage.sync.set({ rssDiscoveryEnabled: false });
+      await BarRSSSettings.set({ rssDiscoveryEnabled: false });
       container.remove();
     });
   }
@@ -1691,7 +1474,7 @@
 
         // Guardar en storage para persistencia
         try {
-          await chrome.storage.sync.set({ feeds: currentSettings.feeds });
+          await BarRSSSettings.set({ feeds: currentSettings.feeds });
         } catch (err) {
           console.warn('[BarRSS] Error guardando estado de canales:', err);
         }
@@ -2711,7 +2494,7 @@
 
   // Listener nativo de almacenamiento: sincronización instantánea y omnidireccional
   chrome.storage.onChanged.addListener((changes, areaName) => {
-    if (areaName === 'sync') {
+    if ((areaName === 'sync' && !changes.feeds) || (areaName === 'local' && changes.feeds)) {
       const updated = {};
       for (const [key, change] of Object.entries(changes)) {
         updated[key] = change.newValue;

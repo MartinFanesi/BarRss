@@ -181,6 +181,7 @@
     <!-- Barra de Filtros por Categoría & Favoritos -->
     <nav class="categories-nav" aria-label="Secciones del periódico">
       <div class="categories-container" id="categoriesContainer">
+        <label class="reading-filter"><input type="checkbox" id="hideReadStories"> Ocultar leídas</label>
         <button type="button" class="cat-pill active" data-cat="all">
           <span>🗞️ Todas</span>
         </button>
@@ -211,6 +212,8 @@
         </button>
       </div>
     </nav>
+
+  <details class="feed-status-panel"><summary id="feedStatusSummary">Estado de los canales</summary><div id="feedStatusList" aria-live="polite"></div></details>
 
     <!-- Estado de Carga (Skeleton) -->
     <div id="loadingState" class="loading-state">
@@ -548,6 +551,9 @@
 
   <!-- Scripts -->
   <script src="feeds_database.js"></script>
+  <script src="shared.js"></script>
+  <script src="image-fallbacks.js"></script>
+  <script src="reader-features.js"></script>
   <script src="reader.js"></script>
 </body>
 </html>

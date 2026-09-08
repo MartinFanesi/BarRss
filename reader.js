@@ -4,68 +4,7 @@
  * botones para compartir en redes sociales y alternancia de temas.
  */
 
-const DEFAULT_FEEDS = [
-  {
-    id: 'arg_infobae',
-    name: 'Infobae',
-    category: 'Noticias Generales',
-    lang: 'es',
-    url: 'https://www.infobae.com/arc/outboundfeeds/rss/',
-    domain: 'infobae.com',
-    enabled: true,
-    isCustom: false
-  },
-  {
-    id: 'arg_clarin',
-    name: 'Clarín',
-    category: 'Noticias Generales',
-    lang: 'es',
-    url: 'https://www.clarin.com/rss/lo-ultimo/',
-    domain: 'clarin.com',
-    enabled: true,
-    isCustom: false
-  },
-  {
-    id: 'eco_cronista',
-    name: 'El Cronista',
-    category: 'Economía y Finanzas',
-    lang: 'es',
-    url: 'https://www.cronista.com/arc/outboundfeeds/news/',
-    domain: 'cronista.com',
-    enabled: true,
-    isCustom: false
-  },
-  {
-    id: 'tec_xataka',
-    name: 'Xataka',
-    category: 'Tecnología',
-    lang: 'es',
-    url: 'https://www.xataka.com/feedburner.xml',
-    domain: 'xataka.com',
-    enabled: true,
-    isCustom: false
-  },
-  {
-    id: 'reddit_argentina',
-    name: 'Reddit - r/argentina',
-    category: '🔴 Reddit & Comunidades',
-    lang: 'es',
-    url: 'https://www.reddit.com/r/argentina/.rss',
-    domain: 'reddit.com',
-    enabled: false,
-    isCustom: false
-  },
-  {
-    id: 'reddit_technology',
-    name: 'Reddit - r/technology',
-    category: '🔴 Reddit & Comunidades',
-    lang: 'es',
-    url: 'https://www.reddit.com/r/technology/.rss',
-    domain: 'reddit.com',
-    enabled: false,
-    isCustom: false
-  }
-];
+const DEFAULT_FEEDS = getDefaultFeedsForCountry('Argentina');
 
 const ITEMS_PER_PAGE = 7; // 1 noticia principal Hero + 6 historias en grilla
 let allStories = [];
@@ -322,7 +261,8 @@ function renderCurrentDate() {
 function getSavedStories() {
   try {
     const raw = localStorage.getItem('barrss_saved_stories');
-    return raw ? JSON.parse(raw) : [];
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed.filter(story => story && BarRSS.httpUrl(story.link)) : [];
   } catch {
     return [];
   }
@@ -359,7 +299,8 @@ function toggleSaveStory(story) {
     nowSaved = true;
   }
 
-  localStorage.setItem('barrss_saved_stories', JSON.stringify(saved));
+  try { localStorage.setItem('barrss_saved_stories', JSON.stringify(saved)); }
+  catch { showToast('No hay espacio para guardar esta noticia.'); return; }
   updateSavedCountUI();
 
   if (currentCategory === 'saved') {
@@ -413,7 +354,7 @@ let countdownInterval = null;
 
 async function initAutoRefreshTimer() {
   try {
-    const saved = await chrome.storage.sync.get({ refreshIntervalMinutes: 5 });
+    const saved = await BarRSSSettings.get({ refreshIntervalMinutes: 5 });
     refreshIntervalMinutes = Math.max(1, parseInt(saved.refreshIntervalMinutes, 10) || 5);
     refreshIntervalSeconds = refreshIntervalMinutes * 60;
     remainingSeconds = refreshIntervalSeconds;
@@ -469,7 +410,7 @@ async function changeTimerInterval(minutes) {
     elements.drawerRefreshInterval.value = String(refreshIntervalMinutes);
   }
   updateTimerUI();
-  await chrome.storage.sync.set({ refreshIntervalMinutes });
+  await BarRSSSettings.set({ refreshIntervalMinutes });
   showToast(`⏱️ Frecuencia actualizada: cada ${refreshIntervalMinutes} min.`);
 }
 
@@ -558,12 +499,12 @@ function setupEventListeners() {
   });
 
   elements.drawerRssDiscoveryToggle?.addEventListener('change', async (e) => {
-    await chrome.storage.sync.set({ rssDiscoveryEnabled: e.target.checked });
+    await BarRSSSettings.set({ rssDiscoveryEnabled: e.target.checked });
     showToast(e.target.checked ? '📡 Detector RSS activado' : '🔇 Detector RSS desactivado');
   });
 
   elements.drawerFloatingBarToggle?.addEventListener('change', async (e) => {
-    await chrome.storage.sync.set({ enabled: e.target.checked });
+    await BarRSSSettings.set({ enabled: e.target.checked });
     showToast(e.target.checked ? '📻 Barra flotante web activada' : 'Barra flotante desactivada');
   });
 
@@ -606,6 +547,9 @@ function setupEventListeners() {
     currentSearch = '';
     if (elements.btnClearSearch) elements.btnClearSearch.style.display = 'none';
     currentCategory = 'all';
+    hideReadStories = false;
+    document.getElementById('hideReadStories').checked = false;
+    saveReadingState();
     elements.catPills?.forEach(p => p.classList.toggle('active', p.getAttribute('data-cat') === 'all'));
     currentPage = 1;
     applyFiltersAndRender();
@@ -720,42 +664,47 @@ function setupEventListeners() {
 /* ==========================================================================
    4. CARGA DE NOTICIAS MEDIANTE EL SERVICE WORKER
    ========================================================================== */
+let newspaperLoadId = 0;
+let newspaperFeedSelection = '';
 async function loadNewspaperStories(forceRefresh = false) {
+  const loadId = ++newspaperLoadId;
   showLoading();
 
   try {
-    const saved = await chrome.storage.sync.get({ feeds: null });
-    let configuredFeeds = Array.isArray(saved.feeds) && saved.feeds.length > 0
+    const saved = await BarRSSSettings.get({ feeds: null });
+    if (loadId !== newspaperLoadId) return;
+    let configuredFeeds = Array.isArray(saved.feeds)
       ? saved.feeds
       : (typeof getDefaultFeedsForCountry === 'function' ? getDefaultFeedsForCountry('Argentina') : DEFAULT_FEEDS);
 
-    // Auto-corregir URLs desactualizadas
-    configuredFeeds = configuredFeeds.map(f => {
-      let u = f.url || '';
-      if (u.includes('lanacion.com.ar/rss/ultimas-noticias')) u = 'https://www.lanacion.com.ar/arc/outboundfeeds/rss/';
-      if (u.includes('clarin.com/rss/ultimomomento')) u = 'https://www.clarin.com/rss/lo-ultimo/';
-      if (u.includes('pagina12.com.ar/rss/portada.xml') || u.includes('pagina12.com.ar/rss/')) u = 'https://www.perfil.com/feed';
-      return { ...f, url: u };
-    });
-
     let activeFeedsList = configuredFeeds.filter(f => f.enabled);
+    const selection = JSON.stringify(activeFeedsList.map(f => f.url));
+    if (selection !== newspaperFeedSelection) allStories = [];
+    newspaperFeedSelection = selection;
     if (activeFeedsList.length === 0) {
-      activeFeedsList = configuredFeeds.slice(0, 5).map(f => ({ ...f, enabled: true }));
+      allStories = [];
+      elements.mastheadFeedsCount.textContent = '0 CANALES ACTIVOS';
+      renderFeedStatus([]);
+      showEmpty('No hay canales activos', 'Activá un canal desde Configuración para empezar a leer.');
+      return;
     }
 
     if (elements.mastheadFeedsCount) {
       elements.mastheadFeedsCount.textContent = `${activeFeedsList.length} CANALES ACTIVOS`;
     }
 
-    const needsFreshImages = allStories.length === 0 || !allStories.some(s => s.imageUrl);
-    const shouldForce = forceRefresh || needsFreshImages;
+    const shouldForce = forceRefresh;
 
     const response = await chrome.runtime.sendMessage({
       action: 'FETCH_MULTIPLE_RSS',
       feeds: activeFeedsList,
-      forceRefresh: shouldForce
+      forceRefresh: shouldForce,
+      // Abrir o actualizar El Diario equivale a revisar la edición.
+      markAsSeen: true
     });
 
+    if (loadId !== newspaperLoadId) return;
+    renderFeedStatus(response?.feedStatuses || []);
     if (!response || !response.success || !response.items || response.items.length === 0) {
       throw new Error(response?.error || 'No se pudieron obtener noticias de los canales.');
     }
@@ -763,7 +712,13 @@ async function loadNewspaperStories(forceRefresh = false) {
     allStories = response.items;
     applyFiltersAndRender();
   } catch (err) {
+    if (loadId !== newspaperLoadId) return;
     console.warn('[BarRSS Diario] Error cargando noticias:', err);
+    if (allStories.length || currentCategory === 'saved') {
+      applyFiltersAndRender();
+      showToast('No se pudo actualizar. Se conserva la última edición.');
+      return;
+    }
     showEmpty('No se pudieron cargar las noticias', err.message || 'Verificá tu conexión a internet o activá más canales en Configuración.');
   }
 }
@@ -791,6 +746,7 @@ function applyFiltersAndRender() {
   const sourceList = currentCategory === 'saved' ? getSavedStories() : allStories;
 
   filteredStories = sourceList.filter(story => {
+    if (hideReadStories && readStories.has(story.link)) return false;
     // Filtro por categoría
     if (currentCategory !== 'all' && currentCategory !== 'saved') {
       if (!matchStoryCategory(story.category, currentCategory)) return false;
@@ -816,7 +772,7 @@ function applyFiltersAndRender() {
     } else {
       showEmpty(
         'No hay noticias que coincidan',
-        currentSearch ? `No se encontraron resultados para "${currentSearch}".` : 'Probá con otra categoría.'
+        currentSearch ? `No se encontraron resultados para "${currentSearch}".` : hideReadStories ? 'Desactivá «Ocultar leídas» o probá con otra categoría.' : 'Probá con otra categoría.'
       );
     }
     return;
@@ -872,7 +828,7 @@ function renderHeroStory(story) {
 
   const imageHtml = story.imageUrl
     ? `<div class="hero-image-wrapper">
-         <img src="${escapeHtml(story.imageUrl)}" alt="${escapeHtml(story.title)}" referrerpolicy="no-referrer" loading="lazy" onerror="this.parentElement.style.display='none'">
+         <img src="${escapeHtml(story.imageUrl)}" alt="${escapeHtml(story.title)}" referrerpolicy="no-referrer" loading="lazy">
        </div>`
     : `<div class="hero-image-wrapper hero-placeholder-banner">
          <div class="hero-placeholder-inner">
@@ -911,6 +867,7 @@ function renderHeroStory(story) {
               <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: currentColor;"><path d="M14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7zM5 5c-1.11 0-2 .9-2 2v12c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2v-6h-2v6H5V7h6V5H5z"/></svg>
             </a>
             ${renderBookmarkButton(story)}
+            ${renderReadButton(story)}
           </div>
 
           <div class="share-social-group">
@@ -942,7 +899,7 @@ function renderGridStories(stories) {
 
     const imageHtml = story.imageUrl
       ? `<div class="story-card-image">
-           <img src="${escapeHtml(story.imageUrl)}" alt="${escapeHtml(story.title)}" referrerpolicy="no-referrer" loading="lazy" onerror="this.parentElement.className='story-card-image placeholder'; this.parentElement.innerHTML='<svg viewBox=\\'0 0 24 24\\' class=\\'card-placeholder-svg\\'><path d=\\'M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z\\'/></svg>'">
+           <img src="${escapeHtml(story.imageUrl)}" alt="${escapeHtml(story.title)}" referrerpolicy="no-referrer" loading="lazy">
          </div>`
       : `<div class="story-card-image placeholder">
            <svg viewBox="0 0 24 24" class="card-placeholder-svg"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
@@ -974,6 +931,7 @@ function renderGridStories(stories) {
               <span>Leer más ↗</span>
             </a>
             ${renderBookmarkButton(story)}
+            ${renderReadButton(story)}
           </div>
 
           <div class="share-social-group">
@@ -1013,6 +971,7 @@ function renderShareButtons(title, link) {
 }
 
 function attachShareEventListeners(container) {
+  attachReadListeners(container);
   // Compartir en redes
   const shareButtons = container.querySelectorAll('.btn-share-icon');
   shareButtons.forEach(btn => {
@@ -1049,7 +1008,7 @@ function attachShareEventListeners(container) {
   });
 
   // Guardar en Favoritos
-  const bookmarkButtons = container.querySelectorAll('.btn-bookmark');
+  const bookmarkButtons = container.querySelectorAll('.btn-bookmark:not(.btn-read-state)');
   bookmarkButtons.forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -1173,13 +1132,16 @@ function escapeHtml(str) {
 function escapeAttr(str) {
   if (!str) return '';
   return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
 }
 
 // Recargar el diario automáticamente si se modifican los canales desde otra ventana
 chrome.storage.onChanged.addListener((changes, areaName) => {
-  if (areaName === 'sync' && changes.feeds) {
+  if (areaName === 'local' && changes.feeds) {
     loadNewspaperStories(true);
   }
 });
@@ -1191,7 +1153,7 @@ let selectedOnboardingCountry = 'Argentina';
 
 async function checkOnboarding() {
   try {
-    const saved = await chrome.storage.sync.get({ onboardingSeen: false, userCountry: 'Argentina' });
+    const saved = await BarRSSSettings.get({ onboardingSeen: false, userCountry: 'Argentina' });
     if (!saved.onboardingSeen) {
       showOnboardingWizard(saved.userCountry || 'Argentina');
     }
@@ -1268,7 +1230,7 @@ async function finishOnboarding(launchTutorial = false) {
     ? getDefaultFeedsForCountry(selectedOnboardingCountry)
     : (typeof ALL_PRESET_FEEDS !== 'undefined' ? ALL_PRESET_FEEDS.slice(0, 8) : []);
 
-  await chrome.storage.sync.set({
+  await BarRSSSettings.set({
     onboardingSeen: true,
     userCountry: selectedOnboardingCountry,
     feeds: defaultFeeds,
@@ -1301,7 +1263,7 @@ async function openSettingsDrawer(defaultTab = 'feeds') {
   elements.settingsDrawer.setAttribute('aria-hidden', 'false');
 
   // Cargar estado actual
-  const saved = await chrome.storage.sync.get({
+  const saved = await BarRSSSettings.get({
     feeds: (typeof ALL_PRESET_FEEDS !== 'undefined' ? ALL_PRESET_FEEDS.slice(0, 10) : []),
     userCountry: 'Argentina',
     rssDiscoveryEnabled: true,
@@ -1426,14 +1388,14 @@ function renderDrawerFeedsList(countryName, searchTerm = '') {
     categories[catName].forEach(feed => {
       const isEnabled = drawerFeedsMemory.some(f => normalizeFeedUrl(f.url) === normalizeFeedUrl(feed.url) && f.enabled);
       const faviconUrl = feed.domain 
-        ? `https://www.google.com/s2/favicons?domain=${feed.domain}&sz=32`
+        ? `https://www.google.com/s2/favicons?domain=${encodeURIComponent(feed.domain)}&sz=32`
         : 'icons/icon16.png';
 
       const itemEl = document.createElement('div');
       itemEl.className = 'drawer-feed-item';
       itemEl.innerHTML = `
         <div class="drawer-feed-left">
-          <img src="${faviconUrl}" class="drawer-feed-icon" alt="" onerror="this.src='icons/icon16.png'">
+          <img src="${faviconUrl}" class="drawer-feed-icon" alt="">
           <div class="drawer-feed-details">
             <span class="drawer-feed-name">${escapeHtml(feed.name)}</span>
             <span class="drawer-feed-sub">${escapeHtml(feed.domain || feed.category)}</span>
@@ -1447,7 +1409,8 @@ function renderDrawerFeedsList(countryName, searchTerm = '') {
 
       const chk = itemEl.querySelector('.drawer-feed-checkbox');
       chk.addEventListener('change', async () => {
-        handleFeedToggle(feed, chk.checked);
+        try { await handleFeedToggle(feed, chk.checked); }
+        catch (error) { chk.checked = !chk.checked; showToast('No se pudo guardar: ' + error.message); }
       });
 
       groupEl.appendChild(itemEl);
@@ -1464,49 +1427,38 @@ function mergeMemoryWithPresets(presets) {
     const norm = normalizeFeedUrl(m.url);
     if (map.has(norm)) {
       map.set(norm, { ...map.get(norm), ...m });
-    } else {
-      map.set(norm, m);
     }
   });
   return Array.from(map.values());
 }
 
-function normalizeFeedUrl(u) {
-  if (!u) return '';
-  try {
-    const parsed = new URL(u);
-    return (parsed.origin + parsed.pathname.replace(/\/+$/, '')).toLowerCase();
-  } catch {
-    return String(u).toLowerCase().replace(/\/+$/, '').trim();
-  }
-}
+function normalizeFeedUrl(u) { return BarRSS.normalizeFeedUrl(u); }
 
 async function handleFeedToggle(feed, isEnabled) {
   const normUrl = normalizeFeedUrl(feed.url);
-  const existingIdx = drawerFeedsMemory.findIndex(f => normalizeFeedUrl(f.url) === normUrl);
-
-  if (existingIdx >= 0) {
-    drawerFeedsMemory[existingIdx].enabled = isEnabled;
-  } else {
-    drawerFeedsMemory.push({
-      ...feed,
-      enabled: isEnabled
-    });
-  }
-
-  await chrome.storage.sync.set({ feeds: drawerFeedsMemory });
+  const next = drawerFeedsMemory.map(f => ({ ...f }));
+  const existingIdx = next.findIndex(f => normalizeFeedUrl(f.url) === normUrl);
+  if (existingIdx >= 0) next[existingIdx].enabled = isEnabled;
+  else next.push({ ...feed, enabled: isEnabled });
+  await BarRSSSettings.set({ feeds: next });
+  drawerFeedsMemory = next;
   showToast(isEnabled ? `✓ Canal activado: ${feed.name}` : `Canal desactivado: ${feed.name}`);
 }
 
 async function toggleCountryFeeds(enableAll) {
-  const checkboxes = elements.drawerFeedsList.querySelectorAll('.drawer-feed-checkbox');
-  checkboxes.forEach(chk => {
-    if (chk.checked !== enableAll) {
-      chk.checked = enableAll;
-      chk.dispatchEvent(new Event('change'));
-    }
-  });
-  showToast(enableAll ? '✓ Todos los canales activados' : 'Canales desactivados');
+  const urls = new Set([...elements.drawerFeedsList.querySelectorAll('.drawer-feed-checkbox')].map(chk => chk.dataset.url));
+  const candidates = [...ALL_PRESET_FEEDS, ...drawerFeedsMemory];
+  const merged = new Map(drawerFeedsMemory.map(f => [normalizeFeedUrl(f.url), { ...f }]));
+  for (const feed of candidates) {
+    if (urls.has(feed.url)) merged.set(normalizeFeedUrl(feed.url), { ...feed, enabled: enableAll });
+  }
+  const next = [...merged.values()];
+  try {
+    await BarRSSSettings.set({ feeds: next });
+    drawerFeedsMemory = next;
+    renderDrawerFeedsList(currentDrawerCountry, elements.drawerFeedSearch?.value.trim());
+    showToast(enableAll ? '✓ Canales visibles activados' : 'Canales visibles desactivados');
+  } catch (err) { showToast('No se pudo guardar: ' + err.message); }
 }
 
 /* ==========================================================================
@@ -1566,7 +1518,7 @@ async function handleDrawerAddCustomFeed() {
   }
 
   drawerFeedsMemory.push(newFeed);
-  await chrome.storage.sync.set({ feeds: drawerFeedsMemory });
+  await BarRSSSettings.set({ feeds: drawerFeedsMemory });
 
   if (elements.drawerCustomName) elements.drawerCustomName.value = '';
   if (elements.drawerCustomUrl) elements.drawerCustomUrl.value = '';
@@ -1611,6 +1563,7 @@ function handleImportOpmlFile(e) {
       const text = event.target.result;
       const parser = new DOMParser();
       const doc = parser.parseFromString(text, 'text/xml');
+      if (doc.querySelector('parsererror')) throw new Error('El archivo OPML no es XML válido.');
       const outlines = doc.querySelectorAll('outline[xmlUrl], outline[type="rss"], outline[type="atom"]');
 
       let importedCount = 0;
@@ -1641,7 +1594,7 @@ function handleImportOpmlFile(e) {
         }
       });
 
-      await chrome.storage.sync.set({ feeds: drawerFeedsMemory });
+      await BarRSSSettings.set({ feeds: drawerFeedsMemory });
       showToast(`📤 ¡${importedCount} canales importados con éxito!`);
       renderDrawerFeedsList(currentDrawerCountry);
       switchDrawerTab('feeds');
@@ -1656,7 +1609,8 @@ function handleImportOpmlFile(e) {
    15. MANTENIMIENTO: BORRAR CACHÉ & REINICIO DE FÁBRICA
    ========================================================================== */
 async function handleClearCache() {
-  await chrome.runtime.sendMessage({ action: 'CLEAR_CACHE' });
+  const result = await chrome.runtime.sendMessage({ action: 'CLEAR_CACHE' });
+  if (!result?.success) { showToast('No se pudo vaciar la caché.'); return; }
   localStorage.removeItem('barrss_saved_stories_cache');
   showToast('🗑️ Memoria caché de noticias liberada con éxito.');
   closeSettingsDrawer();
@@ -1670,6 +1624,7 @@ async function handleResetFactory() {
 
   closeSettingsDrawer();
   await chrome.storage.sync.clear();
+  await chrome.storage.local.remove('feeds');
   showOnboardingWizard('Argentina');
 }
 

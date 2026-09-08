@@ -3281,3 +3281,14 @@ html:not([data-theme="dark"]):not([data-theme="cyberpunk"]):not([data-theme="mid
   fill: var(--text-muted);
   opacity: 0.5;
 }
+
+/* Reading controls and source diagnostics */
+.reading-filter { display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; font-size: 13px; white-space: nowrap; }
+.reading-filter input { accent-color: var(--text-main, #333); }
+.btn-read-state[aria-pressed="true"] { opacity: .7; }
+.feed-status-panel { margin: 24px auto; padding: 16px; max-width: 1160px; color: var(--text-main, inherit); border-top: 1px solid var(--border-color, #888); }
+.feed-status-panel summary { cursor: pointer; font-size: 14px; }
+.feed-status-row { display: flex; gap: 12px; justify-content: space-between; align-items: center; padding: 10px 0; font-size: 13px; overflow-wrap: anywhere; }
+.feed-status-row button { flex-shrink: 0; padding: 6px 10px; cursor: pointer; }
+.hero-image-wrapper.placeholder { min-height: 120px; background: var(--bg-secondary, #ddd); }
+.image-unavailable-label { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; min-height: 120px; font-size: 13px; color: var(--text-muted, #666); }

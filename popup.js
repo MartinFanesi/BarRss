@@ -9,281 +9,7 @@
  * - Sincronización en tiempo real vía chrome.tabs.sendMessage.
  */
 
-const DEFAULT_FEEDS = [
-  // 🇦🇷 Noticias Generales
-  {
-    id: 'arg_infobae',
-    name: 'Infobae',
-    category: 'Noticias Generales',
-    lang: 'es',
-    url: 'https://www.infobae.com/arc/outboundfeeds/rss/',
-    domain: 'infobae.com',
-    enabled: true,
-    isCustom: false
-  },
-  {
-    id: 'arg_clarin',
-    name: 'Clarín',
-    category: 'Noticias Generales',
-    lang: 'es',
-    url: 'https://www.clarin.com/rss/lo-ultimo/',
-    domain: 'clarin.com',
-    enabled: true,
-    isCustom: false
-  },
-  {
-    id: 'arg_lanacion',
-    name: 'La Nación',
-    category: 'Noticias Generales',
-    lang: 'es',
-    url: 'https://www.lanacion.com.ar/arc/outboundfeeds/rss/',
-    domain: 'lanacion.com.ar',
-    enabled: false,
-    isCustom: false
-  },
-  {
-    id: 'arg_perfil',
-    name: 'Perfil',
-    category: 'Noticias Generales',
-    lang: 'es',
-    url: 'https://www.perfil.com/feed',
-    domain: 'perfil.com',
-    enabled: false,
-    isCustom: false
-  },
-
-  // 📈 Economía y Finanzas
-  {
-    id: 'eco_cronista',
-    name: 'El Cronista',
-    category: 'Economía y Finanzas',
-    lang: 'es',
-    url: 'https://www.cronista.com/arc/outboundfeeds/news/',
-    domain: 'cronista.com',
-    enabled: true,
-    isCustom: false
-  },
-  {
-    id: 'eco_ambito',
-    name: 'Ámbito Financiero',
-    category: 'Economía y Finanzas',
-    lang: 'es',
-    url: 'https://www.ambito.com/rss/pages/home.xml',
-    domain: 'ambito.com',
-    enabled: false,
-    isCustom: false
-  },
-  {
-    id: 'eco_iprofesional',
-    name: 'iProfesional',
-    category: 'Economía y Finanzas',
-    lang: 'es',
-    url: 'https://www.iprofesional.com/rss/home',
-    domain: 'iprofesional.com',
-    enabled: false,
-    isCustom: false
-  },
-
-  // 💻 Tecnología
-  {
-    id: 'tec_xataka',
-    name: 'Xataka',
-    category: 'Tecnología',
-    lang: 'es',
-    url: 'https://www.xataka.com/feedburner.xml',
-    domain: 'xataka.com',
-    enabled: true,
-    isCustom: false
-  },
-  {
-    id: 'tec_genbeta',
-    name: 'Genbeta',
-    category: 'Tecnología',
-    lang: 'es',
-    url: 'https://feeds.weblogssl.com/genbeta',
-    domain: 'genbeta.com',
-    enabled: false,
-    isCustom: false
-  },
-  {
-    id: 'tec_hipertextual',
-    name: 'Hipertextual',
-    category: 'Tecnología',
-    lang: 'es',
-    url: 'https://hipertextual.com/feed',
-    domain: 'hipertextual.com',
-    enabled: false,
-    isCustom: false
-  },
-  {
-    id: 'tec_muycomputer',
-    name: 'MuyComputer',
-    category: 'Tecnología',
-    lang: 'es',
-    url: 'https://www.muycomputer.com/feed/',
-    domain: 'muycomputer.com',
-    enabled: false,
-    isCustom: false
-  },
-
-  // ⚽ Deportes
-  {
-    id: 'dep_ole',
-    name: 'Diario Olé',
-    category: 'Deportes',
-    lang: 'es',
-    url: 'https://www.ole.com.ar/rss/lo-ultimo/',
-    domain: 'ole.com.ar',
-    enabled: false,
-    isCustom: false
-  },
-  {
-    id: 'dep_tyc',
-    name: 'TyC Sports',
-    category: 'Deportes',
-    lang: 'es',
-    url: 'https://www.tycsports.com/rss/lo-ultimo.xml',
-    domain: 'tycsports.com',
-    enabled: false,
-    isCustom: false
-  },
-  {
-    id: 'dep_espn',
-    name: 'ESPN Deportes',
-    category: 'Deportes',
-    lang: 'es',
-    url: 'https://www.espn.com.ar/espn/rss/news',
-    domain: 'espn.com.ar',
-    enabled: false,
-    isCustom: false
-  },
-  {
-    id: 'dep_marca',
-    name: 'Marca',
-    category: 'Deportes',
-    lang: 'es',
-    url: 'https://e00-marca.uecdn.es/rss/portada.xml',
-    domain: 'marca.com',
-    enabled: false,
-    isCustom: false
-  },
-
-  // 🌍 Internacionales
-  {
-    id: 'int_bbc',
-    name: 'BBC Mundo',
-    category: 'Internacionales',
-    lang: 'es',
-    url: 'https://feeds.bbci.co.uk/mundo/rss.xml',
-    domain: 'bbc.com',
-    enabled: false,
-    isCustom: false
-  },
-  {
-    id: 'int_elpais',
-    name: 'El País',
-    category: 'Internacionales',
-    lang: 'es',
-    url: 'https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/portada',
-    domain: 'elpais.com',
-    enabled: false,
-    isCustom: false
-  },
-  {
-    id: 'int_dw',
-    name: 'DW Español',
-    category: 'Internacionales',
-    lang: 'es',
-    url: 'https://rss.dw.com/rdf/rss-sp-all',
-    domain: 'dw.com',
-    enabled: false,
-    isCustom: false
-  },
-  {
-    id: 'int_cnn',
-    name: 'CNN en Español',
-    category: 'Internacionales',
-    lang: 'es',
-    url: 'https://cnnespanol.cnn.com/feed/',
-    domain: 'cnnespanol.cnn.com',
-    enabled: false,
-    isCustom: false
-  },
-
-  // 🎬 Cultura y Espectáculos
-  {
-    id: 'cul_teleshow',
-    name: 'Infobae Teleshow',
-    category: 'Cultura y Espectáculos',
-    lang: 'es',
-    url: 'https://www.infobae.com/arc/outboundfeeds/rss/?outputType=xml&subCategory=teleshow',
-    domain: 'infobae.com',
-    enabled: false,
-    isCustom: false
-  },
-  {
-    id: 'cul_rollingstone',
-    name: 'Rolling Stone en Español',
-    category: 'Cultura y Espectáculos',
-    lang: 'es',
-    url: 'https://es.rollingstone.com/feed/',
-    domain: 'rollingstone.com',
-    enabled: false,
-    isCustom: false
-  },
-
-  // 🔴 Reddit & Comunidades
-  {
-    id: 'reddit_argentina',
-    name: 'Reddit - r/argentina',
-    category: '🔴 Reddit & Comunidades',
-    lang: 'es',
-    url: 'https://www.reddit.com/r/argentina/.rss',
-    domain: 'reddit.com',
-    enabled: false,
-    isCustom: false
-  },
-  {
-    id: 'reddit_technology',
-    name: 'Reddit - r/technology',
-    category: '🔴 Reddit & Comunidades',
-    lang: 'es',
-    url: 'https://www.reddit.com/r/technology/.rss',
-    domain: 'reddit.com',
-    enabled: false,
-    isCustom: false
-  },
-  {
-    id: 'reddit_gaming',
-    name: 'Reddit - r/gaming',
-    category: '🔴 Reddit & Comunidades',
-    lang: 'es',
-    url: 'https://www.reddit.com/r/gaming/.rss',
-    domain: 'reddit.com',
-    enabled: false,
-    isCustom: false
-  },
-  {
-    id: 'reddit_science',
-    name: 'Reddit - r/science',
-    category: '🔴 Reddit & Comunidades',
-    lang: 'es',
-    url: 'https://www.reddit.com/r/science/.rss',
-    domain: 'reddit.com',
-    enabled: false,
-    isCustom: false
-  },
-  {
-    id: 'reddit_programming',
-    name: 'Reddit - r/programming',
-    category: '🔴 Reddit & Comunidades',
-    lang: 'es',
-    url: 'https://www.reddit.com/r/programming/.rss',
-    domain: 'reddit.com',
-    enabled: false,
-    isCustom: false
-  }
-];
+const DEFAULT_FEEDS = getDefaultFeedsForCountry('Argentina');
 
 const CATEGORY_CONFIG = {
   'Noticias Generales': { icon: '📰', order: 1 },
@@ -495,7 +221,7 @@ function setupTabs() {
   });
 
   elements.btnCompleteTutorial.addEventListener('click', async () => {
-    await chrome.storage.sync.set({ onboardingSeen: true });
+    await BarRSSSettings.set({ onboardingSeen: true });
     switchTab('tab-feeds');
   });
 }
@@ -517,7 +243,7 @@ function switchTab(tabId) {
 }
 
 async function loadSavedSettings() {
-  const saved = await chrome.storage.sync.get(DEFAULT_SETTINGS);
+  const saved = await BarRSSSettings.get(DEFAULT_SETTINGS);
   const settings = { ...DEFAULT_SETTINGS, ...saved };
   const readerMode = settings.readerOpenMode || 'window';
   if (readerMode === 'tab' && elements.modeTab) {
@@ -558,21 +284,7 @@ async function loadSavedSettings() {
   elements.fontSizeRange.value = settings.fontSize;
   elements.fontSizeVal.textContent = `${settings.fontSize}px`;
 
-  // Smart merge: preservar configuración guardada y añadir nuevos canales predeterminados
-  const savedFeeds = Array.isArray(settings.feeds) && settings.feeds.length > 0 ? settings.feeds : [];
-  const savedMap = new Map(savedFeeds.map(f => [f.id, f]));
-
-  currentFeeds = DEFAULT_FEEDS.map(df => {
-    if (savedMap.has(df.id)) {
-      return { ...df, ...savedMap.get(df.id) };
-    }
-    return { ...df };
-  });
-
-  // Conservar canales personalizados agregados por el usuario
-  savedFeeds.filter(f => f.isCustom && !currentFeeds.some(cf => cf.id === f.id)).forEach(customFeed => {
-    currentFeeds.push(customFeed);
-  });
+  currentFeeds = Array.isArray(settings.feeds) ? settings.feeds.map(f => ({ ...f })) : DEFAULT_FEEDS;
 
   if (elements.languageSelect) {
     elements.languageSelect.value = settings.language || 'es';
@@ -905,7 +617,7 @@ function setupEventListeners() {
       updateBarToggleUI(isEnabled);
 
       // Guardar inmediatamente en sync
-      await chrome.storage.sync.set({ enabled: isEnabled });
+      await BarRSSSettings.set({ enabled: isEnabled });
 
       // Notificar a todas las pestañas para que aparezca o desaparezca al instante
       await broadcastSettingsToTabs({ enabled: isEnabled });
@@ -922,13 +634,13 @@ function setupEventListeners() {
 
   if (elements.modeWindow) {
     elements.modeWindow.addEventListener('change', () => {
-      chrome.storage.sync.set({ readerOpenMode: 'window' });
+      BarRSSSettings.set({ readerOpenMode: 'window' });
     });
   }
 
   if (elements.modeTab) {
     elements.modeTab.addEventListener('change', () => {
-      chrome.storage.sync.set({ readerOpenMode: 'tab' });
+      BarRSSSettings.set({ readerOpenMode: 'tab' });
     });
   }
 
@@ -996,7 +708,7 @@ function setupEventListeners() {
     elements.languageSelect.addEventListener('change', async (e) => {
       const newLang = e.target.value;
       applyTranslations(newLang);
-      await chrome.storage.sync.set({ language: newLang });
+      await BarRSSSettings.set({ language: newLang });
       await broadcastSettingsToTabs({ language: newLang });
       if (newLang === 'en') {
         promptAddEnglishFeeds();
@@ -1008,10 +720,10 @@ function setupEventListeners() {
 
 async function exportConfiguration() {
   try {
-    const saved = await chrome.storage.sync.get(DEFAULT_SETTINGS);
+    const saved = await BarRSSSettings.get(DEFAULT_SETTINGS);
     const exportData = {
       app: 'BarRSS',
-      version: '1.2.0',
+      version: '1.3.0',
       exportedAt: new Date().toISOString(),
       settings: {
         ...DEFAULT_SETTINGS,
@@ -1064,10 +776,10 @@ function importConfigurationFromFile(e) {
 
 async function copyConfigurationToClipboard() {
   try {
-    const saved = await chrome.storage.sync.get(DEFAULT_SETTINGS);
+    const saved = await BarRSSSettings.get(DEFAULT_SETTINGS);
     const exportData = {
       app: 'BarRSS',
-      version: '1.2.0',
+      version: '1.3.0',
       exportedAt: new Date().toISOString(),
       settings: {
         ...DEFAULT_SETTINGS,
@@ -1112,12 +824,19 @@ async function pasteConfigurationFromClipboard() {
 }
 
 async function applyImportedSettings(importedSettings) {
-  if (Array.isArray(importedSettings.feeds)) {
-    currentFeeds = importedSettings.feeds;
+  if (!importedSettings || Array.isArray(importedSettings) || typeof importedSettings !== 'object') throw new Error('Respaldo inválido.');
+  const safe = {};
+  for (const [key, value] of Object.entries(importedSettings)) {
+    if (key === 'feeds') { safe.feeds = BarRSS.validateFeeds(value); continue; }
+    if (!Object.hasOwn(DEFAULT_SETTINGS, key) || typeof value !== typeof DEFAULT_SETTINGS[key]) continue;
+    if (typeof value === 'string' && (value.length > 200 || /[{};<>]/.test(value))) throw new Error('Preferencia inválida: ' + key);
+    if (typeof value === 'number' && !Number.isFinite(value)) throw new Error('Número inválido: ' + key);
+    safe[key] = value;
   }
-  await chrome.storage.sync.set(importedSettings);
+  if (!Object.keys(safe).length) throw new Error('El respaldo no contiene preferencias reconocidas.');
+  await BarRSSSettings.set(safe);
   await loadSavedSettings();
-  await broadcastSettingsToTabs(importedSettings);
+  await broadcastSettingsToTabs(safe);
 }
 
 function exportOpml() {
@@ -1419,15 +1138,7 @@ function addCustomFeed() {
   showFeedbackAlert(`¡Canal "${name}" agregado!`);
 }
 
-function normalizeFeedUrl(u) {
-  if (!u) return '';
-  try {
-    const parsed = new URL(u);
-    return (parsed.origin + parsed.pathname.replace(/\/+$/, '')).toLowerCase();
-  } catch {
-    return String(u).toLowerCase().replace(/\/+$/, '').trim();
-  }
-}
+function normalizeFeedUrl(u) { return BarRSS.normalizeFeedUrl(u); }
 
 let autoSaveDebounceTimer = null;
 
@@ -1468,7 +1179,7 @@ async function saveAndApplySettings(isAutoSave = false) {
   };
 
   // 1. Guardar en chrome.storage.sync
-  await chrome.storage.sync.set(newSettings);
+  await BarRSSSettings.set(newSettings);
 
   // 2. Transmitir en tiempo real a las pestañas
   try {
@@ -1527,5 +1238,12 @@ function escapeHtml(str) {
 chrome.storage.onChanged.addListener((changes, areaName) => {
   if (areaName === 'sync' && changes.enabled !== undefined) {
     updateBarToggleUI(changes.enabled.newValue);
+  }
+});
+
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area === 'local' && changes.feeds) {
+    currentFeeds = changes.feeds.newValue || [];
+    renderFeedsList();
   }
 });

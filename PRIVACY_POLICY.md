@@ -1,52 +1,46 @@
 # Política de Privacidad de BarRSS
 
-**Última actualización:** 1 de Septiembre de 2026
+Última actualización técnica: 8 de septiembre de 2026, versión 1.3.0.
 
-En **BarRSS**, la privacidad y la seguridad de los usuarios es una prioridad fundamental. Esta extensión fue diseñada bajo el principio de **Privacidad por Diseño (Privacy by Design)** y **Mínimo Privilegio (Least Privilege)**.
+## Datos almacenados
 
----
+BarRSS no dispone de un servidor propio de analítica ni envía datos a un servicio de publicidad. En el perfil del navegador guarda:
 
-## 1. Información que recopilamos
-**BarRSS NO recopila, almacena, transmite ni comparte ningún dato personal ni información sensible de navegación.**
+- Canales elegidos y personalizados en `chrome.storage.local`.
+- Titulares, enlaces, resúmenes y URLs de imágenes en una caché local de hasta 60 feeds. Las copias de más de 7 días no se utilizan como respaldo.
+- Favoritos, enlaces marcados como leídos y opciones del lector en almacenamiento local del perfil. Se conservan hasta 5000 enlaces de lectura.
+- Preferencias visuales y de funcionamiento en `chrome.storage.sync`. Chrome puede sincronizarlas entre dispositivos según la configuración de la cuenta del usuario.
 
-* **No recopilamos:**
-  - Nombres, correos electrónicos, contraseñas o datos de inicio de sesión.
-  - Mensajes de correo, chats, historiales de navegación o búsquedas.
-  - Información financiera, tarjetas de crédito o datos bancarios.
-  - Dirección IP del usuario para rastreo o creación de perfiles analíticos.
-  - Cookies o tokens de sesión de las páginas visitadas.
+Al actualizar desde una versión anterior, la lista de canales de `storage.sync` se copia al almacenamiento local; al guardar cambios en la lista se elimina la copia antigua de `sync`. La lista nueva no se sincroniza automáticamente entre equipos. Puede exportarse por decisión del usuario mediante OPML o un respaldo JSON.
 
----
+## Conexiones externas
 
-## 2. Permisos y uso técnico de datos
+El navegador puede conectarse a:
 
-La extensión requiere ciertos permisos técnicos estrictamente necesarios para su funcionamiento visual y de consulta de noticias:
+1. Los servidores de los canales RSS elegidos, para descargar noticias.
+2. Google Favicons, para obtener los logotipos de los medios.
+3. Google Fonts, para descargar las tipografías de la interfaz.
+4. Los servidores que alojan imágenes de las noticias.
+5. El sitio del artículo al abrirlo y el servicio social elegido al usar un botón para compartir.
 
-* `storage`: Utilizado de forma exclusiva para almacenar localmente las preferencias visuales del usuario (colores, posición, velocidad, feeds RSS seleccionados) en su propio perfil mediante `chrome.storage.sync` o `chrome.storage.local`. Ninguno de estos datos se envía a servidores externos.
-* `activeTab` y `tabs`: Permiten que el panel de configuración (popup) notifique a la pestaña activa los cambios de estilo o noticias seleccionadas en tiempo real sin tener que recargar la página.
-* `sidePanel`: Permite al usuario abrir el visor de noticias en el panel lateral nativo de Google Chrome.
-* `host_permissions` / `<all_urls>`:
-  - Se utiliza **únicamente** desde el Service Worker en segundo plano (`background.js`) para realizar peticiones HTTP seguras (`fetch`) a las URLs públicas de los canales de noticias RSS elegidos por el usuario (ej. Infobae, BBC, etc.) y evitar bloqueos por políticas de CORS.
-  - En ningún momento se lee ni se extrae contenido privado de los sitios web que el usuario visita.
-  - Por seguridad, sitios de correo electrónico y autenticación (como Gmail, Outlook, Yahoo Mail y cuentas de Google/Microsoft) están expresamente **excluidos** de la inyección de la barra.
+Estos servidores reciben los datos técnicos habituales de una solicitud, como la dirección IP. La caché conserva resúmenes y direcciones de imágenes; no descarga artículos completos para lectura sin conexión.
 
----
+## Permisos y páginas visitadas
 
-## 3. Servicios de Terceros
-La extensión se conecta únicamente a:
-1. **Los servidores RSS públicos** que el usuario tenga activos para descargar los titulares de las noticias.
-2. **Servicio público de favicons de Google** (`google.com/s2/favicons`) para mostrar los logotipos de los periódicos junto a cada titular.
+- `storage`: preferencias, canales y caché.
+- `tabs` y `activeTab`: gestión de las vistas y comunicación con las pestañas donde funciona la barra.
+- `sidePanel`: apertura del panel lateral.
+- `contextMenus`: accesos desde el menú del icono de la extensión.
+- Acceso a sitios web (`<all_urls>`): consultas de feeds personalizados y ejecución del componente de barra y descubrimiento RSS en páginas compatibles.
 
-No utilizamos ningún servicio de analítica de terceros ni redes publicitarias.
+La barra flotante viene desactivada inicialmente. El descubrimiento RSS puede detectar enlaces públicos a feeds y datos del sitio para sugerir un canal. La adaptación visual puede inspeccionar estilos y posición de elementos de la página. Los dominios de correo y autenticación enumerados en el manifiesto y en el código están excluidos.
 
----
+Shadow DOM ayuda a separar los estilos de la barra de los de la página; no es una barrera de seguridad absoluta frente al código de la página anfitriona.
 
-## 4. Seguridad y Aislamiento (Shadow DOM)
-La barra flotante de noticias se inyecta utilizando **Shadow DOM**, lo que garantiza un aislamiento total:
-* El código de los sitios web visitados no puede interferir en los datos ni configuración de la extensión.
-* La extensión no interfiere ni lee los formularios, campos de texto ni contenido confidencial de las páginas anfitrionas.
+## Control de los datos
 
----
+El usuario puede eliminar favoritos individualmente, cambiar el estado de lectura, importar o exportar canales y vaciar la caché desde Configuración. Vaciar la caché no borra favoritos; una actualización posterior vuelve a guardar las noticias descargadas. El reinicio de configuración restaura preferencias y canales, conservando favoritos y lectura. Los datos locales pertenecen al perfil donde está instalada la extensión.
 
-## 5. Contacto
-Si tenés dudas o consultas sobre esta política de privacidad o sobre el funcionamiento de BarRSS, podés abrir un issue o contactar al desarrollador a través del repositorio del proyecto.
+## Contacto
+
+Las consultas sobre el tratamiento de datos o el funcionamiento de la extensión pueden realizarse mediante un issue en el repositorio del proyecto.

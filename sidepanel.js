@@ -8,281 +8,7 @@
  * - Activar / Desactivar la barra flotante de las páginas web con un clic.
  */
 
-const DEFAULT_FEEDS = [
-  // 🇦🇷 Noticias Generales
-  {
-    id: 'arg_infobae',
-    name: 'Infobae',
-    category: 'Noticias Generales',
-    lang: 'es',
-    url: 'https://www.infobae.com/arc/outboundfeeds/rss/',
-    domain: 'infobae.com',
-    enabled: true,
-    isCustom: false
-  },
-  {
-    id: 'arg_clarin',
-    name: 'Clarín',
-    category: 'Noticias Generales',
-    lang: 'es',
-    url: 'https://www.clarin.com/rss/lo-ultimo/',
-    domain: 'clarin.com',
-    enabled: true,
-    isCustom: false
-  },
-  {
-    id: 'arg_lanacion',
-    name: 'La Nación',
-    category: 'Noticias Generales',
-    lang: 'es',
-    url: 'https://www.lanacion.com.ar/arc/outboundfeeds/rss/',
-    domain: 'lanacion.com.ar',
-    enabled: false,
-    isCustom: false
-  },
-  {
-    id: 'arg_perfil',
-    name: 'Perfil',
-    category: 'Noticias Generales',
-    lang: 'es',
-    url: 'https://www.perfil.com/feed',
-    domain: 'perfil.com',
-    enabled: false,
-    isCustom: false
-  },
-
-  // 📈 Economía y Finanzas
-  {
-    id: 'eco_cronista',
-    name: 'El Cronista',
-    category: 'Economía y Finanzas',
-    lang: 'es',
-    url: 'https://www.cronista.com/arc/outboundfeeds/news/',
-    domain: 'cronista.com',
-    enabled: true,
-    isCustom: false
-  },
-  {
-    id: 'eco_ambito',
-    name: 'Ámbito Financiero',
-    category: 'Economía y Finanzas',
-    lang: 'es',
-    url: 'https://www.ambito.com/rss/pages/home.xml',
-    domain: 'ambito.com',
-    enabled: false,
-    isCustom: false
-  },
-  {
-    id: 'eco_iprofesional',
-    name: 'iProfesional',
-    category: 'Economía y Finanzas',
-    lang: 'es',
-    url: 'https://www.iprofesional.com/rss/home',
-    domain: 'iprofesional.com',
-    enabled: false,
-    isCustom: false
-  },
-
-  // 💻 Tecnología
-  {
-    id: 'tec_xataka',
-    name: 'Xataka',
-    category: 'Tecnología',
-    lang: 'es',
-    url: 'https://www.xataka.com/feedburner.xml',
-    domain: 'xataka.com',
-    enabled: true,
-    isCustom: false
-  },
-  {
-    id: 'tec_genbeta',
-    name: 'Genbeta',
-    category: 'Tecnología',
-    lang: 'es',
-    url: 'https://feeds.weblogssl.com/genbeta',
-    domain: 'genbeta.com',
-    enabled: false,
-    isCustom: false
-  },
-  {
-    id: 'tec_hipertextual',
-    name: 'Hipertextual',
-    category: 'Tecnología',
-    lang: 'es',
-    url: 'https://hipertextual.com/feed',
-    domain: 'hipertextual.com',
-    enabled: false,
-    isCustom: false
-  },
-  {
-    id: 'tec_muycomputer',
-    name: 'MuyComputer',
-    category: 'Tecnología',
-    lang: 'es',
-    url: 'https://www.muycomputer.com/feed/',
-    domain: 'muycomputer.com',
-    enabled: false,
-    isCustom: false
-  },
-
-  // ⚽ Deportes
-  {
-    id: 'dep_ole',
-    name: 'Diario Olé',
-    category: 'Deportes',
-    lang: 'es',
-    url: 'https://www.ole.com.ar/rss/lo-ultimo/',
-    domain: 'ole.com.ar',
-    enabled: false,
-    isCustom: false
-  },
-  {
-    id: 'dep_tyc',
-    name: 'TyC Sports',
-    category: 'Deportes',
-    lang: 'es',
-    url: 'https://www.tycsports.com/rss/lo-ultimo.xml',
-    domain: 'tycsports.com',
-    enabled: false,
-    isCustom: false
-  },
-  {
-    id: 'dep_espn',
-    name: 'ESPN Deportes',
-    category: 'Deportes',
-    lang: 'es',
-    url: 'https://www.espn.com.ar/espn/rss/news',
-    domain: 'espn.com.ar',
-    enabled: false,
-    isCustom: false
-  },
-  {
-    id: 'dep_marca',
-    name: 'Marca',
-    category: 'Deportes',
-    lang: 'es',
-    url: 'https://e00-marca.uecdn.es/rss/portada.xml',
-    domain: 'marca.com',
-    enabled: false,
-    isCustom: false
-  },
-
-  // 🌍 Internacionales
-  {
-    id: 'int_bbc',
-    name: 'BBC Mundo',
-    category: 'Internacionales',
-    lang: 'es',
-    url: 'https://feeds.bbci.co.uk/mundo/rss.xml',
-    domain: 'bbc.com',
-    enabled: false,
-    isCustom: false
-  },
-  {
-    id: 'int_elpais',
-    name: 'El País',
-    category: 'Internacionales',
-    lang: 'es',
-    url: 'https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/portada',
-    domain: 'elpais.com',
-    enabled: false,
-    isCustom: false
-  },
-  {
-    id: 'int_dw',
-    name: 'DW Español',
-    category: 'Internacionales',
-    lang: 'es',
-    url: 'https://rss.dw.com/rdf/rss-sp-all',
-    domain: 'dw.com',
-    enabled: false,
-    isCustom: false
-  },
-  {
-    id: 'int_cnn',
-    name: 'CNN en Español',
-    category: 'Internacionales',
-    lang: 'es',
-    url: 'https://cnnespanol.cnn.com/feed/',
-    domain: 'cnnespanol.cnn.com',
-    enabled: false,
-    isCustom: false
-  },
-
-  // 🎬 Cultura y Espectáculos
-  {
-    id: 'cul_teleshow',
-    name: 'Infobae Teleshow',
-    category: 'Cultura y Espectáculos',
-    lang: 'es',
-    url: 'https://www.infobae.com/arc/outboundfeeds/rss/?outputType=xml&subCategory=teleshow',
-    domain: 'infobae.com',
-    enabled: false,
-    isCustom: false
-  },
-  {
-    id: 'cul_rollingstone',
-    name: 'Rolling Stone en Español',
-    category: 'Cultura y Espectáculos',
-    lang: 'es',
-    url: 'https://es.rollingstone.com/feed/',
-    domain: 'rollingstone.com',
-    enabled: false,
-    isCustom: false
-  },
-
-  // 🔴 Reddit & Comunidades
-  {
-    id: 'reddit_argentina',
-    name: 'Reddit - r/argentina',
-    category: '🔴 Reddit & Comunidades',
-    lang: 'es',
-    url: 'https://www.reddit.com/r/argentina/.rss',
-    domain: 'reddit.com',
-    enabled: false,
-    isCustom: false
-  },
-  {
-    id: 'reddit_technology',
-    name: 'Reddit - r/technology',
-    category: '🔴 Reddit & Comunidades',
-    lang: 'es',
-    url: 'https://www.reddit.com/r/technology/.rss',
-    domain: 'reddit.com',
-    enabled: false,
-    isCustom: false
-  },
-  {
-    id: 'reddit_gaming',
-    name: 'Reddit - r/gaming',
-    category: '🔴 Reddit & Comunidades',
-    lang: 'es',
-    url: 'https://www.reddit.com/r/gaming/.rss',
-    domain: 'reddit.com',
-    enabled: false,
-    isCustom: false
-  },
-  {
-    id: 'reddit_science',
-    name: 'Reddit - r/science',
-    category: '🔴 Reddit & Comunidades',
-    lang: 'es',
-    url: 'https://www.reddit.com/r/science/.rss',
-    domain: 'reddit.com',
-    enabled: false,
-    isCustom: false
-  },
-  {
-    id: 'reddit_programming',
-    name: 'Reddit - r/programming',
-    category: '🔴 Reddit & Comunidades',
-    lang: 'es',
-    url: 'https://www.reddit.com/r/programming/.rss',
-    domain: 'reddit.com',
-    enabled: false,
-    isCustom: false
-  }
-];
+const DEFAULT_FEEDS = getDefaultFeedsForCountry('Argentina');
 
 let refreshIntervalMinutes = 5;
 let refreshIntervalSeconds = 300;
@@ -332,7 +58,7 @@ async function initAutoRefreshTimer() {
   }
 
   try {
-    const saved = await chrome.storage.sync.get({ refreshIntervalMinutes: 5 });
+    const saved = await BarRSSSettings.get({ refreshIntervalMinutes: 5 });
     refreshIntervalMinutes = Math.max(1, parseInt(saved.refreshIntervalMinutes, 10) || 5);
     refreshIntervalSeconds = refreshIntervalMinutes * 60;
     remainingSeconds = refreshIntervalSeconds;
@@ -380,7 +106,7 @@ async function changeTimerInterval(minutes) {
     elements.watchIntervalSelect.value = String(refreshIntervalMinutes);
   }
   updateTimerUI();
-  await chrome.storage.sync.set({ refreshIntervalMinutes });
+  await BarRSSSettings.set({ refreshIntervalMinutes });
 }
 
 function updateTimerUI() {
@@ -454,7 +180,7 @@ function setupEventListeners() {
   elements.webBarEnabled?.addEventListener('change', async () => {
     if (!currentSettings) return;
     currentSettings.enabled = elements.webBarEnabled.checked;
-    await chrome.storage.sync.set({ enabled: currentSettings.enabled });
+    await BarRSSSettings.set({ enabled: currentSettings.enabled });
 
     // Notificar a todas las pestañas
     try {
@@ -487,7 +213,7 @@ function switchView(view) {
 }
 
 async function loadSettingsAndNews() {
-  const saved = await chrome.storage.sync.get({
+  const saved = await BarRSSSettings.get({
     enabled: false,
     feeds: DEFAULT_FEEDS
   });
@@ -501,8 +227,13 @@ async function loadSettingsAndNews() {
   await loadNews(false);
 }
 
+let sidepanelLoadId = 0;
 async function loadNews(forceRefresh = false) {
+  const loadId = ++sidepanelLoadId;
   if (activeFeeds.length === 0) {
+    allNewsItems = [];
+    currentFilteredItems = [];
+    elements.tickerVerticalTrack.textContent = 'No hay canales activos.';
     elements.metaInfoText.textContent = 'Sin canales activos';
     elements.newsListContainer.innerHTML = `
       <div class="status-box">
@@ -528,16 +259,20 @@ async function loadNews(forceRefresh = false) {
       forceRefresh: forceRefresh
     });
 
+    if (loadId !== sidepanelLoadId) return;
     if (!response || !response.success || !response.items || response.items.length === 0) {
       throw new Error(response?.error || 'No se recibieron noticias.');
     }
 
     allNewsItems = response.items;
-    currentFilteredItems = [...allNewsItems];
+    const query = elements.searchInput.value.trim().toLowerCase();
+    currentFilteredItems = allNewsItems.filter(item => !query || item.title.toLowerCase().includes(query) || item.feedName.toLowerCase().includes(query));
 
-    elements.metaInfoText.textContent = `${allNewsItems.length} noticias de ${activeFeeds.length} medios`;
+    elements.metaInfoText.textContent = `${allNewsItems.length} noticias de ${response.activeFeedsCount} medios${response.feedStatuses?.some(s => s.state === 'stale') ? ' · incluye copias guardadas' : ''}`;
     renderCurrentView();
   } catch (error) {
+    if (loadId !== sidepanelLoadId) return;
+    elements.tickerVerticalTrack.textContent = 'No se pudo actualizar: ' + error.message;
     elements.metaInfoText.textContent = 'Error al actualizar';
     elements.newsListContainer.innerHTML = `
       <div class="status-box">
@@ -589,7 +324,7 @@ function renderNewsCards(items) {
     <a href="${escapeHtml(item.link)}" target="_blank" rel="noopener noreferrer" class="news-card">
       <div class="news-card-header">
         <span class="news-badge">
-          ${item.faviconUrl ? `<img src="${escapeHtml(item.faviconUrl)}" class="news-favicon" alt="" onerror="this.style.display='none';" />` : ''}
+          ${item.faviconUrl ? `<img src="${escapeHtml(item.faviconUrl)}" class="news-favicon" alt="" />` : ''}
           <span>${escapeHtml(item.feedName)}</span>
         </span>
       </div>
@@ -599,13 +334,16 @@ function renderNewsCards(items) {
 }
 
 function renderVerticalTicker(items) {
-  if (items.length === 0) return;
+  if (items.length === 0) {
+    elements.tickerVerticalTrack.textContent = 'No hay noticias que coincidan.';
+    return;
+  }
 
   const cardsHtml = items.map(item => `
     <a href="${escapeHtml(item.link)}" target="_blank" rel="noopener noreferrer" class="news-card">
       <div class="news-card-header">
         <span class="news-badge">
-          ${item.faviconUrl ? `<img src="${escapeHtml(item.faviconUrl)}" class="news-favicon" alt="" onerror="this.style.display='none';" />` : ''}
+          ${item.faviconUrl ? `<img src="${escapeHtml(item.faviconUrl)}" class="news-favicon" alt="" />` : ''}
           <span>${escapeHtml(item.feedName)}</span>
         </span>
       </div>
@@ -631,7 +369,7 @@ function escapeHtml(str) {
 
 // Sincronización en vivo si se desactiva la barra web o se modifican los feeds
 chrome.storage.onChanged.addListener((changes, areaName) => {
-  if (areaName === 'sync') {
+  if ((areaName === 'sync' && !changes.feeds) || (areaName === 'local' && changes.feeds)) {
     if (changes.enabled !== undefined && elements.webBarEnabled) {
       elements.webBarEnabled.checked = !!changes.enabled.newValue;
     }

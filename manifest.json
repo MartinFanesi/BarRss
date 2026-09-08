@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "BarRSS - El Diario Digital & Lector RSS",
-  "version": "1.2.0",
+  "version": "1.3.1",
   "description": "Tu periódico digital personalizado con feeds RSS en vivo, vistas editoriales, panel lateral y ticker opcional.",
   "permissions": [
     "storage",
@@ -35,6 +35,8 @@
         "https://login.live.com/*"
       ],
       "js": [
+        "feeds_database.js",
+        "shared.js",
         "content.js"
       ],
       "run_at": "document_end"

@@ -61,7 +61,12 @@ Extensión para **Google Chrome** con arquitectura centrada en la lectura: **El 
 ```text
 BarRss/
 ├── manifest.json      # Manifest V3 con permisos de storage, tabs y sidePanel
-├── background.js       # Service Worker: Fetch múltiple paralelo, parseo XML y bypass CORS
+├── background.js       # Service Worker: descargas limitadas, caché persistente y estado por canal
+├── shared.js           # URLs, validación y almacenamiento compartidos
+├── feed-parser.js      # Adaptador RSS/Atom del parser XML
+├── vendor/             # sax-js empaquetado y su licencia
+├── reader-features.js  # Estado leído/no leído y diagnóstico de canales
+├── image-fallbacks.js  # Reemplazos de imágenes compatibles con CSP
 ├── reader.html         # Lector Editorial Principal: El Diario Digital
 ├── reader.js           # Lógica del diario: 7 temas, buscador, favoritos y auto-refresco
 ├── reader.css          # Estilos editoriales avanzados tipo periódico
@@ -88,3 +93,41 @@ BarRss/
    *(Si ya la tenías cargada, simplemente hacé clic en el botón de **Actualizar (Reload)** 🔄 en la tarjeta de BarRSS).*
 4. Para abrir el **Panel Lateral Nativo**, hacé clic en el ícono de la extensión en la barra de herramientas y presioná:  
    **"🖥️ Abrir en Panel Lateral Nativo de Chrome"**.
+
+
+## Versión 1.3.0
+
+- Estado por canal con fecha de última descarga, detalle de errores y reintento individual.
+- Caché persistente de titulares y resúmenes: conserva hasta 60 feeds y permite recuperar copias de hasta 7 días cuando falla una actualización. No descarga el texto completo ni las imágenes para leer sin conexión.
+- Botón para marcar cada noticia como leída o no leída; abrir el artículo también lo marca. Filtro «Ocultar leídas», con hasta 5000 enlaces recordados localmente.
+- Parser XML para RSS/Atom, enlaces relativos, namespaces y entidades Unicode. Descargas con timeout completo de 8 segundos, máximo 2 MB por feed y seis pedidos simultáneos.
+- Selección vacía respetada, filtro por país corregido, canales preservados entre pantallas y exportación OPML con escape XML correcto.
+- La lista de canales se guarda en `chrome.storage.local`, migrando automáticamente la lista anterior. Las preferencias visuales continúan en `chrome.storage.sync`. **Los canales ya no se sincronizan automáticamente entre equipos**; usá OPML o el respaldo JSON para trasladarlos.
+- Favoritos y estado de lectura permanecen en el perfil local. Los cambios se reflejan entre ventanas del lector.
+
+## Versión 1.3.1
+
+- El icono de BarRSS muestra un badge rojo con los titulares nuevos desde la última vez que abriste El Diario. La primera carga solo establece la base, para no marcar toda la edición como nueva. El contador usa `99+` como máximo visible y se limpia al abrir o actualizar El Diario.
+
+## Pruebas y empaquetado
+
+Con Node.js 22 o posterior:
+
+```sh
+npm test
+npm run package
+```
+
+`npm test` no necesita instalar dependencias. El empaquetado genera `barrss-extension-1.3.0.zip` con los archivos de la extensión y las licencias, sin pruebas ni informes. Descomprimí ese ZIP y cargá la carpeta desde `chrome://extensions`, o recargá esta carpeta si ya la tenés instalada.
+
+Pruebas de navegador opcionales (requieren Playwright y su Chromium):
+
+```sh
+npm install --no-save playwright
+npx playwright install chromium
+npm run test:browser
+```
+
+Las pruebas cargan la extensión real en un perfil temporal y usan noticias simuladas para comprobar los resultados de manera reproducible. No modifican el perfil habitual del navegador ni verifican la disponibilidad actual de todos los medios. Si Playwright ya está instalado en otra ubicación, `PLAYWRIGHT_MODULE` permite indicar su ruta.
+
+Ver [el informe de la versión](reports/INFORME-1.3.0.md) y [los resultados de navegador](reports/browser-results.json).
